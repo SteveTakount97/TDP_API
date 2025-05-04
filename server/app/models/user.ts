@@ -16,6 +16,7 @@ const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
 })
 
 export default class User extends compose(BaseModel, AuthFinder) {
+
   @column({ isPrimary: true })
   declare id: number
 
@@ -34,13 +35,16 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @column()
   declare is_verify: boolean
 
+  @column()
+  declare is_active: boolean
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
   
-  //relations tables
+  //relations 
   @hasMany(() => TontineMemberShip)
   public tontineMemberships!: relations.HasMany<typeof TontineMemberShip>
 

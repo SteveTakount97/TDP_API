@@ -1,38 +1,30 @@
 import type { HttpContext } from '@adonisjs/core/http'
+import Tontine from '#models/tontine'
 
 export default class TontinesController {
-  /**
-   * Display a list of resource
-   */
-  async index({}: HttpContext) {}
+  public async index({}: HttpContext) {
+    return Tontine.all()
+  }
 
-  /**
-   * Display form to create a new record
-   */
-  async create({}: HttpContext) {}
+  public async store({ request }: HttpContext) {
+    const data = request.only(['name', 'description', 'startDate'])
+    return Tontine.create(data)
+  }
 
-  /**
-   * Handle form submission for the create action
-   */
-  async store({ request }: HttpContext) {}
+  public async show({ params }: HttpContext) {
+    return Tontine.findOrFail(params.id)
+  }
 
-  /**
-   * Show individual record
-   */
-  async show({ params }: HttpContext) {}
+  public async update({ request, params }: HttpContext) {
+    const tontine = await Tontine.findOrFail(params.id)
+    tontine.merge(request.only(['name', 'description']))
+    await tontine.save()
+    return tontine
+  }
 
-  /**
-   * Edit individual record
-   */
-  async edit({ params }: HttpContext) {}
-
-  /**
-   * Handle form submission for the edit action
-   */
-  async update({ params, request }: HttpContext) {}
-
-  /**
-   * Delete record
-   */
-  async destroy({ params }: HttpContext) {}
+  public async destroy({ params }: HttpContext) {
+    const tontine = await Tontine.findOrFail(params.id)
+    await tontine.delete()
+    return { message: 'Tontine supprimée' }
+  }
 }

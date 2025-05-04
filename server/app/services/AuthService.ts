@@ -1,12 +1,13 @@
 import User from '#models/user'
 import hash from '@adonisjs/core/services/hash'
 import string from '@adonisjs/core/helpers/string'
+import auth from '@adonisjs/auth/services/main'
 
 
 export default class AuthService {
   static async registerUser(data: any) {
     // Vérification de la présence des champs obligatoires
-    if (!data.email || !data.password || !data.first_name || !data.last_name || !data.role) {
+    if (!data.email || !data.password || !data.first_name || !data.last_name || !data.role || !data.role) {
       throw new Error('Missing required fields')
     }
 
@@ -50,16 +51,7 @@ export default class AuthService {
    }
 
    // Générer un token JWT pour l'utilisateur
-   const token = await user.use('api').generate()
-
-   // Si l'utilisateur n'a pas d'identifier, on en génère un
-   if (!user.identifier) {
-     user.identifier = string.random(10)
-     await user.save()
-     await this.regenerateSecureKey(user)
-   } else {
-     await user.save()
-   }
+   const token = await auth.use('api').createToken(user)
 
    return { user, token }
  }
@@ -73,9 +65,4 @@ export default class AuthService {
    return 'Logged out successfully'
  }
 
- // Méthode pour régénérer une clé sécurisée
- private static async regenerateSecureKey(user: any) {
-   user.secureKey = string.random(12)
-   await user.save()
- }
 }
