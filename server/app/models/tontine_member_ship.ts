@@ -3,6 +3,7 @@ import { BaseModel, column, belongsTo } from '@adonisjs/lucid/orm'
 import * as relations from '@adonisjs/lucid/types/relations'
 import User from './user.js'
 import Tontine from './tontine.js'
+import Role from './role.js'
 
 export default class TontineMemberShip extends BaseModel {
   @column({ isPrimary: true })
@@ -26,9 +27,16 @@ export default class TontineMemberShip extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
 
+  //relations tables 
   @belongsTo(() => User)
   public user!: relations.BelongsTo<typeof User>
 
   @belongsTo(() => Tontine)
   public tontine!: relations.BelongsTo<typeof Tontine>
+
+  @belongsTo(() => Role)
+  public role!: relations.BelongsTo<typeof Role>
+
+  static schema: any
+  roleId: any
 }
