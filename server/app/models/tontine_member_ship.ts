@@ -21,6 +21,9 @@ export default class TontineMemberShip extends BaseModel {
   @column.dateTime()
   declare joinedAt: DateTime
 
+  @column()
+  declare position: number
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
