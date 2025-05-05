@@ -12,28 +12,32 @@ import UsersController from '#controllers/users_controller'
 import AuthController from '#controllers/auth_controller'
 import TontinesController from '#controllers/tontines_controller'
 import RolesController from '#controllers/roles_controller'
-import UserRolesController from '#controllers/user_roles_controller'
 import TransactionLogsController from '#controllers/transaction_logs_controller'
 import PaymentsController from '#controllers/payments_controller'
 import TontineMembershipsController from '#controllers/memberships_controller'
 import CyclesController from '#controllers/cycles_controller'
+import SwaggerController from './swagger.js'
 
 
 const userController = new UsersController()
 const authController = new AuthController()
 const tontineController = new TontinesController()
-const userRoleController = new UserRolesController()
 const roleController = new RolesController()
 const transactionController = new TransactionLogsController()
 const paiementController = new PaymentsController()
 const membershipController = new TontineMembershipsController()
 const cycleController = new CyclesController()
+const swaggerController = new SwaggerController()
 
 router.get('/', async () => {
-  return {
-    hello: 'world',
-  }
+  return 'Bienvenue sur l\'API TDP Tontine Digital PlateForm'
 })
+// Route pour afficher Swagger UI
+router.get('/swagger-ui', swaggerController.showSwaggerUI.bind(swaggerController))
+
+// Route pour récupérer le fichier JSON Swagger
+router.get('/swagger-json', swaggerController.showSwaggerJSON.bind(swaggerController))
+router.get('/swagger-yaml', swaggerController.generateSwaggerYaml.bind(swaggerController))
 router.group(() => {
 
   //Authentification
@@ -45,7 +49,7 @@ router.group(() => {
   router.get('/user/', userController.index) 
   router.get('/user/:id', userController.show) 
   router.put('/user/:id', userController.update) 
-  router.put('/user/:id', userController.deactivate) 
+  router.put('/user/:id/desactive', userController.deactivate) 
   router.get('/user/role/:id', roleController.show)
   router.get('/user/admin-role/', roleController.index)
 
@@ -58,11 +62,10 @@ router.group(() => {
   
 
   // User roles (optionnel si tu veux gérer des rôles globaux)
-  router.post('/admin/user-role/', userRoleController.index)
-  router.post('/admin/user-role/:id', userRoleController.show)
-  router.post('/admin/user-role/:id', userRoleController.store)
-  router.put('/admin/user-role/:id', userRoleController.update)
-  router.delete('/admin/user-role/:id', userRoleController.destroy)
+  router.get('/admin/user-role/', roleController.index)
+  router.get('/admin/user-role/:id', roleController.show)
+  router.post('/admin/user-role/:id', roleController.store)
+  router.delete('/admin/user-role/:id', roleController.destroy)
 
   //membreship
   router.post('mermbership/:id', membershipController.store)
@@ -73,7 +76,7 @@ router.group(() => {
   //paiement
   router.get('Payment/:id', paiementController.show)
   router.post('Payment/:id', paiementController.store)
-  router.get('Payment/:id', paiementController.index)
+  router.get('Payment/user/', paiementController.index)
   
   //gestion des cycles
   router.post('/Cycle-tontine/', cycleController.store)
@@ -81,7 +84,7 @@ router.group(() => {
   router.get('/Cycle-tontine/', cycleController.index)
 
   // Logs de transactions
-  router.get('/transaction/', transactionController.index)
+  router.get('/transaction/user/:id', transactionController.index)
   router.get('/transaction/:id', transactionController.show)
 
   
