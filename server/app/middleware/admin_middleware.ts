@@ -8,7 +8,7 @@ export default class AdminMiddleware {
     if (!user) {
         return response.unauthorized('You must be logged in to access this resource')
       }
-
+    //on part du user authentifier
     const membership = await user
       .related('memberships')
       .query()
