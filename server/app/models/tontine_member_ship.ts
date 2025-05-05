@@ -3,7 +3,7 @@ import { BaseModel, column, belongsTo } from '@adonisjs/lucid/orm'
 import * as relations from '@adonisjs/lucid/types/relations'
 import User from './user.js'
 import Tontine from './tontine.js'
-import Role from './role.js'
+
 
 export default class TontineMemberShip extends BaseModel {
   @column({ isPrimary: true })
@@ -14,6 +14,9 @@ export default class TontineMemberShip extends BaseModel {
 
   @column()
   declare tontineId: number
+
+  @column()
+  declare role: 'member' | 'admin' | 'treasurer'
 
   @column()
   declare isActive: boolean
@@ -36,9 +39,6 @@ export default class TontineMemberShip extends BaseModel {
 
   @belongsTo(() => Tontine)
   public tontine!: relations.BelongsTo<typeof Tontine>
-
-  @belongsTo(() => Role)
-  public role!: relations.BelongsTo<typeof Role>
 
   static schema: any
   roleId: any

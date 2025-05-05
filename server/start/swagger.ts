@@ -74,7 +74,7 @@ export default class SwaggerController {
   public async generateSwaggerYaml() {
     const yamlData = stringify(swaggerSpec) // Convertir en YAML
     writeFileSync('swagger.yaml', yamlData) // Écrire dans un fichier
-    console.log('✅ Fichier swagger.yaml généré avec succès !')
+    console.log('Fichier swagger.yaml généré avec succès !')
   }
   
 }

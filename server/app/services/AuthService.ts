@@ -1,68 +1,91 @@
-import User from '#models/user'
-import hash from '@adonisjs/core/services/hash'
+import User from '#models/user' 
 import string from '@adonisjs/core/helpers/string'
-import auth from '@adonisjs/auth/services/main'
-
+import { error } from 'console'
 
 export default class AuthService {
+  
   static async registerUser(data: any) {
-    // Vérification de la présence des champs obligatoires
-    if (!data.email || !data.password || !data.first_name || !data.last_name || !data.role || !data.role) {
+    if (!data.username || !data.email || !data.password || !data.fullName || !data.phone_number || !data.role) {
       throw new Error('Missing required fields')
     }
 
-   // Vérification si l'email existe déjà
-   const existingUserEmail = await User.findBy('email', data.email)
-   if (existingUserEmail) {
-     throw new Error('Email already exists')
-   }
+    const existingUserEmail = await User.findBy('email', data.email)
+    if (existingUserEmail) {
+      throw new Error('Email already exists')
+    }
 
-   // Vérification si le first_name existe déjà
-   const existingUserName = await User.findBy('first_name', data.first_name)
-   if (existingUserName) {
-     throw new Error('First name already exists')
-   }
+    const existingUserName = await User.findBy('full_name', data.full_name)
+    if (existingUserName) {
+      throw new Error('First name already exists')
+    }
+    
 
-   // Hachage du mot de passe avant de le sauvegarder
-   const hashedPassword = await hash.make(data.password)
+    // Crée l'utilisateur sans inclure secureKey
+    const newUser = await User.create({
+      fullName: data.fullName,
+      email: data.email,
+      role: data.role,
+      phone_number: data.phone_number,
+      password: data.password
+    })
 
-   // Création du nouvel utilisateur avec le mot de passe haché
-   const newUser = await User.create({
-     ...data,
-     password: hashedPassword,  // On sauvegarde le mot de passe haché
-     identifier: string.random(10),
-     secureKey: string.random(12),
-   })
+    return newUser
+  }
 
-   return newUser
- }
+  static async authenticateUser(data: any) {
+     // Validation de base
+    if (!data.email || !data.password) {
+      throw  error('Email and password are required', 400)
+    }
 
- // Authentifier un utilisateur
- static async authenticateUser(email: string, password: string) {
-   const user = await User.findBy('email', email)
-   if (!user) {
-     throw new Error('User not found')
-   }
+    const user = await User.verifyCredentials(data.email, data.password)
+    if (!user) {
+      throw new Error('User not found')
+    }
 
-   // Vérification du mot de passe
-   const passwordVerified = await hash.verify(user.password, password)
-   if (!passwordVerified) {
-     throw new Error('Invalid credentials')
-   }
+    // Générer un token JWT pour l'utilisateur
+    const token = await User.accessTokens.create(user)
+    
+    if (!user) {
+      await this.regenerateSecureKey(user)
+    } else {
+      await user.save()
+    }
 
-   // Générer un token JWT pour l'utilisateur
-   const token = await auth.use('api').createToken(user)
+    return {
+      user,
+      token,
+      type: 'bearer',
+      value: token.value!.release(),
+    }
+  }
 
-   return { user, token }
- }
+  static async logoutUser(auth: any) {
+    try {
+      // Authentification automatique (lève une exception si échoue)
+      await auth.use('api').authenticate()
 
- // Déconnexion de l'utilisateur
- static async logoutUser(auth: any) {
-   const user = await auth.use('api').authenticate()
-   if (!user) throw new Error('No authenticated user found')
+      return { message: 'Logged out successfully' }
+    } catch (error) {
+      throw new Error(error.message || 'Failed to log out')
+    }
+  }
+  static async getUser(auth: any) {
+    await auth.use('api').authenticate()
+    const user = auth.user
 
-   await auth.use('api').revoke()
-   return 'Logged out successfully'
- }
+    if (!user) {
+      throw new Error('Utilisateur non trouvé')
+    }
 
+    return {
+      id: user.id,
+      email: user.email,
+      username: user.username,
+      role: user.role,
+    }
+  }
+  private static async regenerateSecureKey(user: any) {
+    user.secureKey = string.random(12)
+  }
 }

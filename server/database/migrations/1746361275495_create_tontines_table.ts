@@ -9,7 +9,7 @@ export default class extends BaseSchema {
       table.string('name').notNullable()
       table.text('description').nullable()
       table.enum('type', ['rotative', 'solidaire', 'autre']).defaultTo('rotative')
-      table.float('amount_per_cycle').notNullable()
+      table.float('amountPerCycle').notNullable()
       table.date('start_date').notNullable()
       table.enum('status', ['actif', 'termine', 'en_attente']).defaultTo('en_attente')
       table.timestamps(true)

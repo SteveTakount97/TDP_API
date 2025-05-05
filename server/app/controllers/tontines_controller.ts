@@ -19,7 +19,7 @@ export default class TontinesController {
    *             schema:
    *               type: array
    *               items:
-   *                 $ref: '#/components/schemas/Tontine'
+   *              
    *       401:
    *         description: Non autorisé
    */
@@ -64,7 +64,7 @@ export default class TontinesController {
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/Tontine'
+   *             
    *       400:
    *         description: Erreur de validation
    *       401:
@@ -101,7 +101,7 @@ export default class TontinesController {
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/Tontine'
+   *              
    *       404:
    *         description: Tontine non trouvée
    *       401:
@@ -148,7 +148,7 @@ export default class TontinesController {
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/Tontine'
+   *               
    *       404:
    *         description: Tontine non trouvée
    *       400:

@@ -1,4 +1,5 @@
 import { HttpContext } from "@adonisjs/core/http"
+import TontineMemberShip from "#models/tontine_member_ship"
 
 export default class AdminMiddleware {
   public async handle({ auth, params, response }: HttpContext, next: () => Promise<void>) {
@@ -9,15 +10,14 @@ export default class AdminMiddleware {
         return response.unauthorized('You must be logged in to access this resource')
       }
     //on part du user authentifier
-    const membership = await user
-      .related('memberships')
-      .query()
-      .where('tontine_id', tontineId)
-      .preload('role')
-      .first()
+    const membership = await TontineMemberShip
+    .query()
+    .where('user_id', user!.id)
+    .andWhere('tontine_id', tontineId)
+    .first()
 
-    if (!membership || membership.role.name !== 'admin') {
-      return response.unauthorized({ message: 'Access denied: Admins only' })
+    if (!membership || membership.role !== 'admin') {
+      return response.unauthorized({ message: 'Access reserved for administrators of this tontine.' })
     }
 
     await next()

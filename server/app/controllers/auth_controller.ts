@@ -49,7 +49,7 @@ export default class AuthController {
    */
   public async register({ request, response }: HttpContext): Promise<void> {
     try {
-      const user = await AuthService.registerUser(request.only(['email', 'password', 'full_name', 'username', 'role']))
+      const user = await AuthService.registerUser(request.only(['email', 'password', 'fullName', 'phone_number', 'role']))
       return response.created({ user })
     } catch (e) {
       return response.badRequest({ message: e.message })
@@ -94,14 +94,20 @@ export default class AuthController {
    *         description: Identifiants invalides
    */
   public async login({ request, response }: HttpContext): Promise<void> {
+    const { email, password } = request.only(['email', 'password'])
+
     try {
-      const { email, password } = request.only(['email', 'password'])
-      const { user, token } = await AuthService.authenticateUser(email, password)
-      return response.ok({ token, user })
-    } catch (e) {
-      return response.unauthorized({ message: 'Invalid credentials' })
+      const { user, token } = await AuthService.authenticateUser({ email, password })
+      // Authentification réussie, on génère une session
+     
+      return response.ok({ token, user }) // Réponse 200
+      
+    } catch (error) {
+      console.error('Login error:', error.message)
+      return response.unauthorized({ message: 'Invalid credentials' }) //Réponse 401
     }
   }
+
 /**
  * @swagger
  * /logout:

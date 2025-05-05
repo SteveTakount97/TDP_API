@@ -19,7 +19,7 @@ export default class UsersController {
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/User'
+ *             
  *       401:
  *         description: Non autorisé
  *       500:
@@ -58,7 +58,7 @@ export default class UsersController {
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/User'
+ *              
  *       401:
  *         description: Non autorisé
  *       404:
@@ -110,7 +110,7 @@ export default class UsersController {
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/User'
+   *             
    *       400:
    *         description: Requête invalide
    *       404:
@@ -153,7 +153,7 @@ export default class UsersController {
    *                 message:
    *                   type: string
    *                 user:
-   *                   $ref: '#/components/schemas/User'
+   *                 
    *       401:
    *         description: Non autorisé
    *       500:
