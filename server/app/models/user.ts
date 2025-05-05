@@ -33,6 +33,9 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare phone_number: string
 
   @column()
+  declare role: string
+
+  @column()
   declare is_verify: boolean
 
   @column()
@@ -46,7 +49,7 @@ export default class User extends compose(BaseModel, AuthFinder) {
   
   //relations 
   @hasMany(() => TontineMemberShip)
-  public tontineMemberships!: relations.HasMany<typeof TontineMemberShip>
+  public memberships!: relations.HasMany<typeof TontineMemberShip>
 
   @hasMany(() => UserRole)
   public roles!: relations.HasMany<typeof UserRole>
