@@ -47,14 +47,14 @@ export default class TontineMembershipsController {
   }
   /**
  * @swagger
- * /tontines/available-users:
+ * /tontines/:id/users/seach:
  *   get:
  *     tags:
- *       - Tontine Memberships
+ *       - TontineMemberships
  *     summary: Rechercher les utilisateurs non affiliés à une tontine
  *     parameters:
  *       - in: query
- *         name: tontine_id
+ *         name: tontineId
  *         required: true
  *         schema:
  *           type: integer

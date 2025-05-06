@@ -32,12 +32,26 @@ export default class UsersController {
       return response.unauthorized({ message: 'Non autorisé' })
     }
     const tontineId = params.id
-    const memberships = await TontineMemberShip
-      .query()
-      .where('tontine_id', tontineId)
-      .preload('user') // charge les infos de l'utilisateur
 
-    const users = memberships.map(m => m.user)
+    const membership = await TontineMemberShip
+    .query()
+    .where('tontineId', tontineId)
+    .andWhere('userId', auth.user.id)
+    .first()
+
+     // Vérifie si l'utilisateur connecté est membre et admin dans cette tontine
+      if (!membership || membership.role !== 'admin') {
+        return response.unauthorized({ message: 'Accès réservé aux administrateurs de la tontine.' })
+      }
+      //si l'utilisateur est administrateur alors on charges tous les membres de la tontine
+      const memberships = await TontineMemberShip
+        .query()
+        .where('tontineId', tontineId)
+        .preload('user')
+  
+      const users = memberships.map(m => m.user)
+  
+    
     return response.ok(users)
     } catch (error) {
     return response.internalServerError({ message: 'Erreur lors de la récupération des utilisateurs.' })
@@ -125,7 +139,7 @@ export default class UsersController {
   public async update({ request, params, response }: HttpContext) {
     try {
       const user = await User.findOrFail(params.id)
-      const data = request.only(['email', 'username'])
+      const data = request.only(['email', 'phone_number'])
 
       user.merge(data)
       await user.save()
