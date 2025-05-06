@@ -19,7 +19,7 @@ export default class PaymentsController {
    *             schema:
    *               type: array
    *               items:
-   *                 $ref: '#/components/schemas/Payment'
+   *                
    *       500:
    *         description: Erreur serveur
    */
@@ -68,7 +68,7 @@ export default class PaymentsController {
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/Payment'
+   *               
    *       400:
    *         description: Erreur de validation ou données manquantes
    */
@@ -103,7 +103,7 @@ export default class PaymentsController {
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/Payment'
+   *              
    *       404:
    *         description: Paiement non trouvé
    */
