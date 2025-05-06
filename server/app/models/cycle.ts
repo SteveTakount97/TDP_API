@@ -27,8 +27,11 @@ export default class Cycle extends BaseModel {
   @column()
   declare status: 'ouvert' | 'ferme' | 'annule'
 
+  //Relations
+
   @belongsTo(() => Tontine)
   public tontine!: relations.BelongsTo<typeof Tontine>
+
 
   @belongsTo(() => User, {
     foreignKey: 'beneficiaryId',
@@ -36,7 +39,7 @@ export default class Cycle extends BaseModel {
   public beneficiary!: relations.BelongsTo<typeof User>
 
   @hasMany(() => Paiement)
-  public payments!: relations.HasMany<typeof Paiement>
+  public payments!: relations.HasMany<typeof Paiement> //Chaque cycle contient plusieurs paiements (de chaque membre).
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

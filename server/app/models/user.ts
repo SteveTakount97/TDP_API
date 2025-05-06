@@ -32,9 +32,6 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare phone_number: string
 
   @column()
-  declare role: string
-
-  @column()
   declare is_verify: boolean
 
   @column()

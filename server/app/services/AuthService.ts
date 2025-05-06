@@ -5,7 +5,7 @@ import { error } from 'console'
 export default class AuthService {
   
   static async registerUser(data: any) {
-    if (!data.username || !data.email || !data.password || !data.fullName || !data.phone_number || !data.role) {
+    if (!data.username || !data.email || !data.password || !data.fullName || !data.phone_number) {
       throw new Error('Missing required fields')
     }
 
@@ -24,7 +24,6 @@ export default class AuthService {
     const newUser = await User.create({
       fullName: data.fullName,
       email: data.email,
-      role: data.role,
       phone_number: data.phone_number,
       password: data.password
     })
@@ -82,7 +81,6 @@ export default class AuthService {
       id: user.id,
       email: user.email,
       username: user.username,
-      role: user.role,
     }
   }
   private static async regenerateSecureKey(user: any) {

@@ -1,4 +1,5 @@
 import type { HttpContext } from '@adonisjs/core/http'
+import TontineMemberShip from '#models/tontine_member_ship'
 import User from '#models/user'
 
 export default class UsersController {
@@ -8,12 +9,12 @@ export default class UsersController {
  *   get:
  *     tags:
  *       - Users
- *     summary: Liste de tous les utilisateurs
+ *     summary: Liste de tous les utilisateurs memebre d'une tontine
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Liste des utilisateurs
+ *         description: Liste des utilisateurs affilié à une tontine
  *         content:
  *           application/json:
  *             schema:
@@ -25,13 +26,18 @@ export default class UsersController {
  *       500:
  *         description: Erreur serveur
  */
-  public async index({ auth, response }: HttpContext) {
+  public async index({ auth,params, response }: HttpContext) {
    try {
     if (!auth.user) {
       return response.unauthorized({ message: 'Non autorisé' })
     }
+    const tontineId = params.id
+    const memberships = await TontineMemberShip
+      .query()
+      .where('tontine_id', tontineId)
+      .preload('user') // charge les infos de l'utilisateur
 
-    const users = await User.all()
+    const users = memberships.map(m => m.user)
     return response.ok(users)
     } catch (error) {
     return response.internalServerError({ message: 'Erreur lors de la récupération des utilisateurs.' })

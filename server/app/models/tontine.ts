@@ -36,10 +36,10 @@ export default class Tontine extends BaseModel {
 
   //relations tables
   @hasMany(() => Cycle)
-  public cycles!: relations.HasMany<typeof Cycle>
+  public cycles!: relations.HasMany<typeof Cycle> //Une tontine a plusieurs cycles 
 
   @hasMany(() => TontineMemberShip)
-  public memberships!: relations.HasMany<typeof TontineMemberShip>
+  public memberships!: relations.HasMany<typeof TontineMemberShip> //Une tontine peut avoir plusieurs membres 
 
   @hasMany(() => Paiement)
   public payments!: relations.HasMany<typeof Paiement>
