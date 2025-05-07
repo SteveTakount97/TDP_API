@@ -4,14 +4,15 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import Header from '@/component/header';
 import Features from '@/component/fonctionnalite';
 
 export default function HomePage() {
   return (
     <main className="min-h-screen flex flex-col">
-      {/* Hero Section */}
+      <Header />
       <section className="flex-1 flex flex-col md:flex-row justify-center items-center  justify-between  py-20 bg-gradient-to-r from-blue-600 to-indigo-700 text-white to-purple-600 ">
-        {/* Image à gauche avec animation */}
+      
       <motion.div
         className="w-1/2 flex justify-center rounded-full overflow-hidden"
         animate={{ rotate: 40 }}
@@ -31,14 +32,13 @@ export default function HomePage() {
           Une plateforme moderne pour gérer vos tontines de manière simple, sécurisée et collaborative.
         </p>
       
-          <Link href="/auth/register" className="bg-white text-blue-700 font-semibold px-5 py-2 rounded hover:bg-gray-100 shadow-lg ">
+          <Link href="/auth/tontine" className="bg-white text-blue-700 font-semibold px-5 py-2 rounded hover:bg-gray-100 shadow-lg ">
             Créer votre Tontine
           </Link>
           
         </div>
       </section>
 
-      {/* Features Section */}
      <Features />
     </main>
   );

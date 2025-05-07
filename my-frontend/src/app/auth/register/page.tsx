@@ -1,6 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
+import { motion } from 'framer-motion';
+import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -29,9 +33,26 @@ export default function RegisterPage() {
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center">
-      <form onSubmit={handleSubmit} className="bg- p-8 rounded shadow-md w-full max-w-md">
-        <h2 className="text-2xl font-semibold mb-6 text-center">Créer un compte</h2>
+    <main className="relative min-h-screen text-black flex flex-col items-center justify-center bg-gradient-to-b from-blue-500 to-white">
+       <Link href="/" className="flex items-center text-white hover:underline absolute top-4 left-4 ">
+       <ArrowLeft className="w-5 h-5 mr-1" />
+       Retour à l’accueil
+       </Link>
+       <motion.div
+        className="w-1/2 flex justify-center rounded-full overflow-hidden"
+        animate={{ rotate: 30 }}
+        transition={{ repeat: Infinity, duration: 10, ease: 'linear' }}
+        
+      >
+        <Image
+          src="/Tdp.png"
+          alt="Logo animé"
+          width={250}
+          height={150}
+        />
+        </motion.div>
+      <form onSubmit={handleSubmit} className="bg- p-8 rounded shadow-md w-full max-w-md text-black">
+        <h2 className="text-2xl font-semibold mb-6 text-center text-black">Créer un compte</h2>
 
         <input
           name="firstName"
