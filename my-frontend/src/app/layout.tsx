@@ -2,6 +2,7 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import Header from '@/component/header';
+import Footer from '@/component/footer';
 
 export const metadata: Metadata = {
   title: 'TDP - Gestion de Tontine',
@@ -14,6 +15,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <Header />
         <main>{children} </main> 
+        <Footer />
       </body>
     </html>
   );

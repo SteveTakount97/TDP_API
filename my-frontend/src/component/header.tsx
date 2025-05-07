@@ -3,22 +3,28 @@
 import { Menu, X } from 'lucide-react'
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <header className="bg- border-b shadow-sm sticky top-0 z-50">
+    <header className="bg-gray-900 border-b shadow-sm sticky">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         {/* Logo ou Titre */}
-        <h1 className="text-xl font-bold">TDP</h1>
+       <Image
+         src="/Tdp.png"
+         alt='logo TDP'
+         width={50}
+         height={50}
+       />
 
         {/* Liens Connexion / Inscription */}
         <nav className="hidden md:flex items-center gap-6">
-          <Link href="/auth/login" className="text-gray-700 hover:text-blue-600">
+          <Link href="/auth/login" className="text-white hover:text-blue-600">
             Connexion
           </Link>
-          <Link href="/auth/register" className="text-blue-600 hover:underline">
+          <Link href="/auth/register" className="text-white hover:underline">
             Inscription
           </Link>
         </nav>
