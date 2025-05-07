@@ -11,7 +11,7 @@ export default function HomePage() {
   return (
     <main className="min-h-screen flex flex-col">
       <Header />
-      <section className="flex-1 flex flex-col md:flex-row justify-center items-center  justify-between  py-20 bg-gradient-to-r from-blue-600 to-indigo-700 text-white to-purple-600 ">
+      <section className="flex-1 flex flex-col md:flex-row items-center  justify-between  py-20 bg-gradient-to-r from-blue-600 text-white to-purple-600 ">
       
       <motion.div
         className="w-1/2 flex justify-center rounded-full overflow-hidden"

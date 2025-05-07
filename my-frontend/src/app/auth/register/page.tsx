@@ -33,7 +33,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <main className="relative min-h-screen text-black flex flex-col items-center justify-center bg-gradient-to-b from-blue-500 to-white">
+    <main className="relative min-h-screen text-white flex flex-col items-center justify-center bg-gradient-to-b from-blue-500 to-purple-600">
        <Link href="/" className="flex items-center text-white hover:underline absolute top-4 left-4 ">
        <ArrowLeft className="w-5 h-5 mr-1" />
        Retour à l’accueil
@@ -51,8 +51,8 @@ export default function RegisterPage() {
           height={150}
         />
         </motion.div>
-      <form onSubmit={handleSubmit} className="bg- p-8 rounded shadow-md w-full max-w-md text-black">
-        <h2 className="text-2xl font-semibold mb-6 text-center text-black">Créer un compte</h2>
+      <form onSubmit={handleSubmit} className="bg- p-8 rounded shadow-md w-full max-w-md">
+        <h2 className="text-2xl font-semibold mb-6 text-center ">Créer un compte</h2>
 
         <input
           name="firstName"
@@ -120,7 +120,7 @@ export default function RegisterPage() {
        
         <p className="text-sm text-center mt-4">
            Vous avez déjà un compte ?{' '}
-          <a href="/auth/login" className="text-blue-600 hover:underline">
+          <a href="/auth/login" className="text-white hover:underline">
               Se connecter
           </a>
          </p>

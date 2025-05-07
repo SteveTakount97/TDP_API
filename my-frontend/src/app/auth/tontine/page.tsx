@@ -1,5 +1,7 @@
 'use client';
 import { useState } from 'react';
+import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
 
 export default function CreateTontineForm() {
   const [formData, setFormData] = useState({
@@ -42,7 +44,13 @@ export default function CreateTontineForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-xl mx-auto p-6 rounded-xl shadow-md space-y-4">
+    <main className='relative bg-gradient-to-b from-blue-500 to-purple-600'>
+      <Link href="/" className="flex items-center text-white hover:underline absolute top-4 left-4 ">
+       <ArrowLeft className="w-5 h-5 mr-1" />
+       Retour à l’accueil
+      </Link>
+      
+    <form onSubmit={handleSubmit} className="max-w-xl mx-auto p-6 rounded-xl shadow-md space-y-4 ">
       <h2 className="text-2xl font-bold">Créer une nouvelle tontine</h2>
 
       {error && <p className="text-red-500 text-sm">{error}</p>}
@@ -135,6 +143,6 @@ export default function CreateTontineForm() {
          Retour à l’accueil
       </a>
     </form>
-    
+    </main>
   );
 }

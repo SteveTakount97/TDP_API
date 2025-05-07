@@ -28,7 +28,7 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="relative min-h-screen flex flex-col items-center justify-center text-black bg-gradient-to-b from-blue-500 to-white h-screen w-full bg-black bg-opacity-50">
+    <main className="relative min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-blue-500 to-purple-600 h-screen w-full bg-white bg-opacity-50 text-white">
       <Link href="/" className="flex items-center text-white hover:underline absolute top-4 left-4 ">
        <ArrowLeft className="w-5 h-5 mr-1" />
        Retour à l’accueil
@@ -75,7 +75,7 @@ export default function LoginPage() {
 
         <p className="text-sm text-center mt-4">
           Pas encore de compte ?{' '}
-          <a href="/auth/register" className="text-blue-600 hover:underline">
+          <a href="/auth/register" className="text-white hover:underline">
             S’inscrire
           </a>
         </p>
