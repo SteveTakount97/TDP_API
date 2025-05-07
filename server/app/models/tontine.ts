@@ -2,7 +2,6 @@ import { DateTime } from 'luxon'
 import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
 import * as relations from '@adonisjs/lucid/types/relations'
 import Cycle from './cycle.js'
-import UserRole from './user_role.js'
 import TontineMemberShip from './tontine_member_ship.js'
 import Paiement from './paiement.js'
 
@@ -37,13 +36,10 @@ export default class Tontine extends BaseModel {
 
   //relations tables
   @hasMany(() => Cycle)
-  public cycles!: relations.HasMany<typeof Cycle>
+  public cycles!: relations.HasMany<typeof Cycle> //Une tontine a plusieurs cycles 
 
   @hasMany(() => TontineMemberShip)
-  public memberships!: relations.HasMany<typeof TontineMemberShip>
-
-  @hasMany(() => UserRole)
-  public roles!: relations.HasMany<typeof UserRole>
+  public memberships!: relations.HasMany<typeof TontineMemberShip> //Une tontine peut avoir plusieurs membres 
 
   @hasMany(() => Paiement)
   public payments!: relations.HasMany<typeof Paiement>

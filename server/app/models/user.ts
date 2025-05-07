@@ -6,7 +6,6 @@ import * as relations from '@adonisjs/lucid/types/relations'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import { DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
 import TontineMemberShip from './tontine_member_ship.js'
-import UserRole from './user_role.js'
 import Paiement from './paiement.js'
 import Tontine from './tontine.js'
 
@@ -46,10 +45,7 @@ export default class User extends compose(BaseModel, AuthFinder) {
   
   //relations 
   @hasMany(() => TontineMemberShip)
-  public tontineMemberships!: relations.HasMany<typeof TontineMemberShip>
-
-  @hasMany(() => UserRole)
-  public roles!: relations.HasMany<typeof UserRole>
+  public memberships!: relations.HasMany<typeof TontineMemberShip>
 
   @hasMany(() => Paiement)
   public payments!: relations.HasMany<typeof Paiement>
