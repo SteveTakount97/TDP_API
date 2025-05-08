@@ -5,6 +5,8 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({
@@ -12,11 +14,11 @@ export default function LoginPage() {
     password: '',
   });
   const [error, setError] = useState('');
+  const router = useRouter()
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!formData.email || !formData.password) {
@@ -25,6 +27,38 @@ export default function LoginPage() {
     }
     console.log('Tentative de connexion :', formData);
     //envoy les données au backend pour authentification
+    const data = {
+      email: formData.email,
+      password: formData.password,
+    }
+    try {
+      const response = await axios.post('http://localhost:3333/api/login', data);
+      console.log('Réponse de la requête:', response);
+      // Vérifier que la réponse contient bien un token
+      if (response && response.data && response.data.token.token) {
+        // Sauvegarder le token dans le localStorage
+        const token = response.data.token.token
+        console.log(token);
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(response.data.user)); 
+  
+        alert('Connexion réussie');
+  
+        // Redirection vers la page d'accueil
+        router.push('/acceuil');
+      } else {
+        // Si la réponse ne contient pas de token
+        setError('Erreur : Pas de token reçu');
+        console.error('Erreur : Pas de token reçu', response);
+      }
+  
+    } catch (err) {
+      // Gérer les erreurs d'API ou autres erreurs
+      setError('Erreur de connexion : ');
+      console.error('Erreur de connexion:', err);
+    }
+  
+
   };
 
   return (
@@ -44,6 +78,7 @@ export default function LoginPage() {
           alt="Logo animé"
           width={250}
           height={250}
+          className="w-24 h-auto"
         />
         </motion.div>
       <form onSubmit={handleSubmit} className="bg- p-8 rounded shadow-md w-full max-w-md">

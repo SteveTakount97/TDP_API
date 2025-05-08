@@ -9,7 +9,7 @@ export default class extends BaseSchema {
       table.string('full_name').notNullable()
       table.string('email', 254).notNullable().unique()
       table.string('password').notNullable()
-      table.integer('phone_number').notNullable()
+      table.string('phone_number').notNullable()
       table.string('profile_image_url').nullable()
       table.boolean('is_verified').defaultTo(false)
       table.boolean('is_active').defaultTo(true) 

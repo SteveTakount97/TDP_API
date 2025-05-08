@@ -10,8 +10,8 @@ export default function Features() {
   return (
     <section className="py-16 bg-gray-50">
       <div className="max-w-5xl mx-auto px-4">
-        <h2 className="text-3xl font-bold text-center mb-12 text-black">Fonctionnalités Clés</h2>
-        <div className="grid md:grid-cols-3 gap-8">
+        <h2 className="text-3xl font-bold text-center mb-12 text-black cursor-pointer">Fonctionnalités Clés</h2>
+        <div className="grid md:grid-cols-3 gap-8 cursor-pointer">
           {features.map((feat, i) => (
             <motion.div
               key={i}

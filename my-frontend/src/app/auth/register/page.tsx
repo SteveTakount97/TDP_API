@@ -5,31 +5,66 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
+import { useRegister } from '@/hook/auth/hooks';
+import { useRouter } from 'next/navigation';
+
 
 export default function RegisterPage() {
+  const { handleRegister } = useRegister();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
-    phoneNumber: '',
+    phone_number: '',
     email: '',
     password: '',
     confirmPassword: '',
   });
 
+  const router = useRouter();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
 
     if (formData.password !== formData.confirmPassword) {
       alert("Les mots de passe ne correspondent pas.");
       return;
     }
+    if (formData.password.length < 6) {
+      alert("Le mot de passe doit contenir au moins 6 caractères.");
+      return;
+    }
+    const phoneRegex = /^\d{8,10}$/;
+    if (!phoneRegex.test(formData.phone_number)) {
+      alert("Numéro de téléphone invalide.");
+      return;
+    }
+    const full_name = `${formData.firstName} ${formData.lastName}`;
 
-    console.log('Inscription envoyée :', formData);
-    //envoy les données vers ton backend AdonisJS ici
+    const payload = {
+      full_name,
+      email: formData.email,
+      phone_number: formData.phone_number,
+      password: formData.password,
+    };
+    
+    try {
+      const response = await handleRegister(payload);
+      console.log("Payload envoyé :", payload);
+      
+      if (response) {
+        alert('Inscription réussie !');
+      }
+    
+      router.push("/acceuil"); 
+
+    } catch (error) {
+      console.error('Erreur lors de l’inscription :', error);
+      alert('Une erreur est survenue lors de l’inscription.');
+    }
   };
 
   return (
@@ -49,6 +84,7 @@ export default function RegisterPage() {
           alt="Logo animé"
           width={250}
           height={150}
+          className="w-24 h-auto"
         />
         </motion.div>
       <form onSubmit={handleSubmit} className="bg- p-8 rounded shadow-md w-full max-w-md">
@@ -75,10 +111,10 @@ export default function RegisterPage() {
         />
 
         <input
-          name="phoneNumber"
-          type="tel"
+          name="phone_number"
+          type="number"
           placeholder="Numéro de téléphone"
-          value={formData.phoneNumber}
+          value={formData.phone_number}
           onChange={handleChange}
           required
           className="w-full p-2 border rounded mb-4"

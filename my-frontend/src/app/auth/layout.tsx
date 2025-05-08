@@ -3,7 +3,7 @@
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
     return (
       <html lang="fr">
-        <body className="to-purple-600 bg-gradient-to-r ">
+        <body>
           <div >{children}</div>
         </body>
       </html>
