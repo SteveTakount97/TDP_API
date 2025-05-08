@@ -1,13 +1,24 @@
 // app/page.tsx
 'use client';
-
-import Link from 'next/link';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Header from '@/component/header';
 import Features from '@/component/fonctionnalite';
+import { useRouter } from 'next/navigation';
+
+
 
 export default function HomePage() {
+  const router = useRouter();
+
+  const handleClick = () => {
+    const token = localStorage.getItem("token");
+    if (!!token) {
+      router.push("/auth/tontine");
+    } else {
+      alert("Veuillez vous connecter pour créer une tontine.");
+    }
+  };
   return (
     <main className="min-h-screen flex flex-col">
       <Header />
@@ -32,9 +43,9 @@ export default function HomePage() {
           Une plateforme moderne pour gérer vos tontines de manière simple, sécurisée et collaborative.
         </p>
       
-          <Link href="/auth/tontine" className="bg-white text-blue-700 font-semibold px-5 py-2 rounded hover:bg-gray-100 shadow-lg ">
+          <button onClick={handleClick} className="bg-white text-blue-700 font-semibold px-5 py-2 rounded hover:bg-gray-100 shadow-lg ">
             Créer votre Tontine
-          </Link>
+          </button>
           
         </div>
       </section>
