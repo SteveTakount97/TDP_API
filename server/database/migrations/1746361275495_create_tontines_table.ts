@@ -8,13 +8,12 @@ export default class extends BaseSchema {
       table.increments('id')
       table.string('name').notNullable()
       table.text('description').nullable()
-      table.enum('type', ['rotative', 'solidaire', 'autre']).defaultTo('rotative')
+      table.enum('type', ['rotative', 'solidaire']).defaultTo('rotative')
+      table.enum('frequence', ['hebdomadaire', 'mensuelle', 'trimestrielle']).notNullable()
       table.float('amountPerCycle').notNullable()
       table.date('start_date').notNullable()
       table.enum('status', ['actif', 'termine', 'en_attente']).defaultTo('en_attente')
       table.timestamps(true)
-      table.timestamp('created_at')
-      table.timestamp('updated_at')
     })
   }
 

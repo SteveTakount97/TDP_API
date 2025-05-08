@@ -20,7 +20,7 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare id: number
 
   @column()
-  declare fullName: string | null
+  declare full_name: string 
 
   @column()
   declare email: string
@@ -30,6 +30,9 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
   @column()
   declare phone_number: string
+
+  @column()
+  declare profile_image_url: string
 
   @column()
   declare is_verify: boolean
@@ -45,7 +48,7 @@ export default class User extends compose(BaseModel, AuthFinder) {
   
   //relations 
   @hasMany(() => TontineMemberShip)
-  public memberships!: relations.HasMany<typeof TontineMemberShip>
+  public memberships!: relations.HasMany<typeof TontineMemberShip> //Un utilisateur peut appartenir à plusieurs tontines
 
   @hasMany(() => Paiement)
   public payments!: relations.HasMany<typeof Paiement>

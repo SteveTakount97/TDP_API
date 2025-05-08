@@ -4,7 +4,7 @@ import AuthService from '#services/AuthService'
 export default class AuthController {
   /**
    * @swagger
-   * /register:
+   * /api/register:
    *   post:
    *     tags:
    *       - Auth
@@ -20,8 +20,8 @@ export default class AuthController {
    *               - email
    *               - password
    *               - full_name
-   *               - username
-   *               - role
+   *               - phone_number
+   *            
    *             properties:
    *               email:
    *                 type: string
@@ -30,10 +30,9 @@ export default class AuthController {
    *                 type: string
    *               full_name:
    *                 type: string
-   *               username:
-   *                 type: string
-   *               role:
-   *                 type: string
+   *               phone_number:
+   *                 type: number
+   *              
    *     responses:
    *       201:
    *         description: Utilisateur créé avec succès
@@ -43,13 +42,13 @@ export default class AuthController {
    *               type: object
    *               properties:
    *                 user:
-   *                   $ref: '#/components/schemas/User'
+   *                   
    *       400:
    *         description: Erreur de validation ou autre
    */
   public async register({ request, response }: HttpContext): Promise<void> {
     try {
-      const user = await AuthService.registerUser(request.only(['email', 'password', 'fullName', 'phone_number', 'role']))
+      const user = await AuthService.registerUser(request.only(['email', 'password', 'full_name', 'phone_number']))
       return response.created({ user })
     } catch (e) {
       return response.badRequest({ message: e.message })
@@ -58,7 +57,7 @@ export default class AuthController {
 
   /**
    * @swagger
-   * /login:
+   * /api/login:
    *   post:
    *     tags:
    *       - Auth
@@ -110,7 +109,7 @@ export default class AuthController {
 
 /**
  * @swagger
- * /logout:
+ * /api/logout:
  *   post:
  *     tags:
  *       - Auth

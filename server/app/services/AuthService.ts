@@ -5,7 +5,7 @@ import { error } from 'console'
 export default class AuthService {
   
   static async registerUser(data: any) {
-    if (!data.username || !data.email || !data.password || !data.fullName || !data.phone_number) {
+    if (!data.email || !data.password || !data.full_name || !data.phone_number) {
       throw new Error('Missing required fields')
     }
 
@@ -22,7 +22,7 @@ export default class AuthService {
 
     // Crée l'utilisateur sans inclure secureKey
     const newUser = await User.create({
-      fullName: data.fullName,
+      full_name: data.full_name,
       email: data.email,
       phone_number: data.phone_number,
       password: data.password

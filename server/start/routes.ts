@@ -41,11 +41,12 @@ router.get('/swagger-yaml', swaggerController.generateSwaggerYaml.bind(swaggerCo
 router.group(() => {
 
   //Authentification
-  router.post('/auth/register', authController.register)
-  router.post('/auth/login', authController.login)
-  router.post('/auth/logout', authController.logout)
+  router.post('api/register', authController.register)
+  router.post('api/login', authController.login)
+  router.post('api/logout', authController.logout)
 
   //gestion des utilisateurs
+  router.post('/user/image/', userController.uploadProfileImage)
   router.get('/user/', userController.index) 
   router.get('/user/:id', userController.show) 
   router.put('/user/:id', userController.update) 
@@ -83,4 +84,4 @@ router.group(() => {
 
   
 
-}).prefix('/users')
+})

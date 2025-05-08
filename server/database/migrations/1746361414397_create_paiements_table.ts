@@ -13,8 +13,7 @@ export default class extends BaseSchema {
       table.timestamp('paid_at', { useTz: true }).notNullable()
       table.string('payment_method').nullable()
       table.enum('status', ['valide', 'en_attente', 'refuse']).defaultTo('en_attente')
-      table.timestamp('created_at')
-      table.timestamp('updated_at')
+      table.timestamps(true)
     })
   }
 

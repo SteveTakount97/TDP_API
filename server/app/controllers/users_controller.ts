@@ -1,11 +1,12 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import TontineMemberShip from '#models/tontine_member_ship'
 import User from '#models/user'
+import app from '@adonisjs/core/services/app'
 
 export default class UsersController {
 /**
  * @swagger
- * /users:
+ * /api/users:
  *   get:
  *     tags:
  *       - Users
@@ -59,7 +60,7 @@ export default class UsersController {
   }
 /**
  * @swagger
- * /users/{id}:
+ * /api/users/{id}:
  *   get:
  *     tags:
  *       - Users
@@ -99,7 +100,7 @@ export default class UsersController {
 
   /**
    * @swagger
-   * /users/{id}:
+   * /api/users/{id}:
    *   put:
    *     tags:
    *       - Users
@@ -155,7 +156,7 @@ export default class UsersController {
 
   /**
    * @swagger
-   * /users/deactivate:
+   * /api/users/deactivate:
    *   post:
    *     tags:
    *       - Users
@@ -198,4 +199,76 @@ export default class UsersController {
       return response.internalServerError({ message: 'Erreur lors de la désactivation du compte.', error: error.message })
     }
   }
+/**
+ * @swagger
+ * /api/users/image:
+ *   post:
+ *     summary: Upload de l'image de profil utilisateur
+ *     tags:
+ *       - Utilisateur
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               image:
+ *                 type: string
+ *                 format: binary
+ *                 description: Image JPEG ou PNG (max 2 Mo)
+ *     responses:
+ *       200:
+ *         description: Image de profil mise à jour avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 imageUrl:
+ *                   type: string
+ *       400:
+ *         description: Erreur de validation ou fichier manquant
+ *       500:
+ *         description: Erreur serveur lors de l’upload
+ */
+public async uploadProfileImage({ request, auth, response }: HttpContext) {
+  try {
+    const user = auth.user!
+    const image = request.file('image', {
+      extnames: ['jpg', 'jpeg', 'png'],
+      size: '2mb',
+    })
+
+    if (!image) {
+      return response.badRequest({ message: 'Aucune image fournie.' })
+    }
+
+    if (!image.isValid) {
+      return response.badRequest({ message: image.errors[0].message })
+    }
+
+    const fileName = `${user.id}_${Date.now()}.${image.extname}`
+    await image.move(app.makePath('/uploads/avatars'), {
+      name: fileName
+    })
+
+    user.profile_image_url = `/uploads/avatars/${fileName}`
+    await user.save()
+
+    return response.ok({
+      message: 'Image de profil mise à jour avec succès.',
+      imageUrl: user.profile_image_url,
+    })
+  } catch (error) {
+    console.error('Erreur lors de l’upload d’image :', error)
+    return response.status(500).send({
+      message: 'Une erreur est survenue lors de l’upload de l’image.',
+    })
+  }
+}
 }

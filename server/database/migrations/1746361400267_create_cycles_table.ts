@@ -12,8 +12,7 @@ export default class extends BaseSchema {
       table.date('end_date').notNullable()
       table.integer('beneficiary_id').unsigned().references('id').inTable('users').nullable()
       table.enum('status', ['ouvert', 'ferme', 'annule']).defaultTo('ouvert')
-      table.timestamp('created_at')
-      table.timestamp('updated_at')
+      table.timestamps(true)
     })
   }
 

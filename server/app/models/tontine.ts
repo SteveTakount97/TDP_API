@@ -17,7 +17,10 @@ export default class Tontine extends BaseModel {
   declare description: string
 
   @column()
-  declare type: 'rotative' | 'solidaire' | 'autre'
+  declare type: 'rotative' | 'solidaire' 
+
+  @column()
+  declare frequency: 'hebdomadaire' | 'mensuelle' | 'trimestrielle'
 
   @column()
   declare amountPerCycle: number
