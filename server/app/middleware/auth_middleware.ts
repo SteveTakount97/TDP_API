@@ -1,37 +1,41 @@
 import { HttpContext } from '@adonisjs/core/http'
 import type { NextFn } from '@adonisjs/core/types/http'
-import type { Authenticators } from '@adonisjs/auth/types'
+
 
 export default class AuthMiddleware {
-  redirectTo = '/signup'
+  redirectTo = '/auth/login'
 
   public async handle(
     ctx: HttpContext,
     next: NextFn,
-    options: {
-      guards?: (keyof Authenticators)[]
-    } = {}
+    
   ) {
     try {
-      const guards = options.guards || ['api']
+     
       
       // Extraire le token du header Authorization
       const authorizationHeader = ctx.request.header('Authorization')
-      console.log('🔎 Token reçu dans le header:', authorizationHeader)
-      if (authorizationHeader && authorizationHeader.startsWith('Bearer ')) {
-        const token = authorizationHeader.split(' ')[1]
-        ctx.request.updateBody({ token }) // Mettre à jour le body avec le token
+      if (!authorizationHeader) {
+        console.error('❌ Aucun token trouvé dans le header')
+        return ctx.response.unauthorized({ message: 'Token manquant' })
       }
+      
+      console.log('🔎 Token reçu dans le header:', authorizationHeader)
 
-      // Vérification du token avec le guard `api`
-      await ctx.auth.authenticateUsing(guards)
-      console.log('🔑 Token reçu et valide')
-
-      //  Passe à la suite si authentifié
+      // Valider le token avec 'api'
+      await ctx.auth.use('api').authenticate()
+      ctx.auth.user
       await next()
     } catch (error) {
-      console.error('❌ Authentification échouée :', error.message)
-      return ctx.response.unauthorized({ message: 'Token invalide ou expiré' })
+      console.error('Authentification échouée :', error.message)
+
+      // Gérer des erreurs spécifiques
+      if (error.code === 'E_UNAUTHORIZED_ACCESS') {
+        return ctx.response.unauthorized({ message: 'Token invalide ou expiré' })
+      }
+
+      // En cas d'autres erreurs
+      return ctx.response.internalServerError({ message: 'Erreur serveur', error: error.message })
     }
   }
 }

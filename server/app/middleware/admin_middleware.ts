@@ -12,8 +12,8 @@ export default class AdminMiddleware {
     //on part du user authentifier
     const membership = await TontineMemberShip
     .query()
-    .where('user_id', user!.id)
-    .andWhere('tontine_id', tontineId)
+    .where('userId', user!.id)
+    .andWhere('tontineId', tontineId)
     .first()
 
     if (!membership || membership.role !== 'admin') {

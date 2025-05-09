@@ -2,6 +2,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 import TontineMemberShip from '#models/tontine_member_ship'
 import User from '#models/user'
 import app from '@adonisjs/core/services/app'
+import { cuid } from '@adonisjs/core/helpers'
 
 export default class UsersController {
 /**
@@ -238,7 +239,7 @@ export default class UsersController {
  */
 public async uploadProfileImage({ request, auth, response }: HttpContext) {
   try {
-    const user = auth.user!
+    const user = await auth.use('api').authenticate()
     const image = request.file('image', {
       extnames: ['jpg', 'jpeg', 'png'],
       size: '2mb',
@@ -252,8 +253,8 @@ public async uploadProfileImage({ request, auth, response }: HttpContext) {
       return response.badRequest({ message: image.errors[0].message })
     }
 
-    const fileName = `${user.id}_${Date.now()}.${image.extname}`
-    await image.move(app.makePath('/uploads/avatars'), {
+    const fileName = `${cuid()}_${Date.now()}.${image.extname}`
+    await image.move(app.publicPath('/uploads/avatars'), {
       name: fileName
     })
 

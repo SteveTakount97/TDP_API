@@ -16,6 +16,8 @@ import PaymentsController from '#controllers/payments_controller'
 import TontineMembershipsController from '#controllers/memberships_controller'
 import CyclesController from '#controllers/cycles_controller'
 import SwaggerController from './swagger.js'
+import AuthMiddleware from '#middleware/auth_middleware'
+import AdminMiddleware from '#middleware/admin_middleware'
 
 
 const userController = new UsersController()
@@ -37,16 +39,15 @@ router.get('/swagger-ui', swaggerController.showSwaggerUI.bind(swaggerController
 router.get('/swagger-json', swaggerController.showSwaggerJSON.bind(swaggerController))
 router.get('/swagger-yaml', swaggerController.generateSwaggerYaml.bind(swaggerController))
 
+  //Authentification
+router.post('api/register', authController.register)
+router.post('api/login', authController.login)
+router.post('api/logout', authController.logout)
 
 router.group(() => {
 
-  //Authentification
-  router.post('api/register', authController.register)
-  router.post('api/login', authController.login)
-  router.post('api/logout', authController.logout)
-
   //gestion des utilisateurs
-  router.post('/user/image/', userController.uploadProfileImage)
+  router.post('/users/image/', userController.uploadProfileImage)
   router.get('/user/', userController.index) 
   router.get('/user/:id', userController.show) 
   router.put('/user/:id', userController.update) 
@@ -54,7 +55,7 @@ router.group(() => {
 
 
   //gestion Tontine
-  router.post('/admin/create', tontineController.store)
+  router.post('/admin/create', tontineController.store).middleware([new AdminMiddleware().handle])
   router.get('/admin/tontine', tontineController.index)
   router.get('/admin/tontine/:id', tontineController.show)
   router.put('/admin/tontine/!id', tontineController.update)
@@ -84,4 +85,4 @@ router.group(() => {
 
   
 
-})
+}).prefix('/api').middleware([new AuthMiddleware().handle])
