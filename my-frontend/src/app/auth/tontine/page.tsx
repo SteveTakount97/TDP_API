@@ -21,7 +21,11 @@ export default function CreateTontineForm() {
 
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData(prev => {
+    const newState = { ...prev, [name]: value };
+    console.log(newState);  // Vérifier l'état mis à jour
+    return newState;
+  });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -82,7 +86,7 @@ export default function CreateTontineForm() {
         <label className="block font-medium">Montant de chaque tour *</label>
         <input
           type="number"
-          name="amount"
+          name="amountPerCycle"
           onChange={handleChange}
           value={formData.amountPerCycle}
           className="w-full mt-1 p-2 border rounded-lg"
@@ -92,19 +96,29 @@ export default function CreateTontineForm() {
 
       <div>
         <label className="block font-medium">Fréquence (ex: hebdomadaire, mensuelle) *</label>
-        <input
-          type="text"
-          name="frequency"
-          onChange={handleChange}
-          value={formData.frequency}
-          className="w-full mt-1 p-2 border rounded-lg"
-          required
-        />
+          <span
+        className="relative group cursor-pointer text-black"
+         title="Fréquence : chaque membre doit cotiser selon le cycle choisi"
+          >
+           ⓘ
+         </span>
+           <select
+            name="frequency"
+            className="w-full mt-1 p-2 border rounded-lg"
+             value={formData.frequency}
+            onChange={handleSelectChange}
+           required
+           >
+       <option value="">-- Sélectionnez --</option>
+      <option value="hebdomadaire">Hebdomadaire</option>
+      <option value="mensuelle">Mensuelle</option>
+      <option value="trimestrielle">Trimestrielle</option>
+      </select>
       </div>
       <div>
       <label className="block text-sm font-medium mb-1">Type de tontine</label>
            <span
-          className="relative group cursor-pointer text-white"
+          className="relative group cursor-pointer text-black"
           title="Rotative : chaque membre reçoit à tour de rôle. Solidaire : tous les fonds vont à un bénéficiaire déterminé."
             >
           ⓘ

@@ -1,5 +1,5 @@
 import api from "@/lib/axios";
-import { RegisterPayload } from "../features/types";
+import { RegisterPayload } from "../app/features/types";
 
 export const registerUser = async (payload: RegisterPayload) => {
   try {

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { registerUser } from "@/services/authService";
-import { RegisterPayload } from "@/features/types";
+import { RegisterPayload } from "@/app/features/types";
 
 type RegisterErrorType =
   | "VALIDATION_ERROR"

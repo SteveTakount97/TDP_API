@@ -1,10 +1,11 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import Tontine from '#models/tontine'
+import { schema, rules } from '@adonisjs/validator'
 
 export default class TontinesController {
   /**
    * @swagger
-   * /tontines:
+   * /api/tontines:
    *   get:
    *     tags:
    *       - Tontines
@@ -34,7 +35,7 @@ export default class TontinesController {
 
   /**
    * @swagger
-   * /tontines:
+   * /api/tontines:
    *   post:
    *     tags:
    *       - Tontines
@@ -71,18 +72,44 @@ export default class TontinesController {
    *         description: Non autorisé
    */
   public async store({ request, response }: HttpContext) {
+    const tontineSchema = schema.create({
+      name: schema.string({}, [rules.maxLength(100)]),
+      description: schema.string.optional(),
+      amountPerCycle: schema.number([rules.unsigned()]),
+      type: schema.enum(['rotative', 'solidaire'] as const),
+      frequency: schema.enum(['hebdomadaire', 'mensuelle', 'trimestrielle'] as const),
+      startDate: schema.string()
+    })
+
     try {
-      const data = request.only(['name', 'description', 'startDate'])
-      const tontine = await Tontine.create(data)
+      const data = await request.validate({ schema: tontineSchema })
+
+      const tontine = await Tontine.create({
+        name: data.name,
+        description: data.description ?? undefined,
+        amountPerCycle: data.amountPerCycle,
+        type: data.type,
+        frequency: data.frequency,
+        startDate: data.startDate 
+      })
+
       return response.created(tontine)
     } catch (error) {
-      return response.badRequest({ message: error.message })
+      if (error.messages) {
+        const formattedErrors = error.messages.errors.reduce((acc: Record<string, string[]>, curr: any) => {
+          acc[curr.field] = [curr.message]
+          return acc
+        }, {})
+        return response.status(422).send({ errors: formattedErrors })
+      }
+
+      console.error(error)
+      return response.status(500).send({ message: 'Erreur serveur' })
     }
   }
-
   /**
    * @swagger
-   * /tontines/{id}:
+   * /api/tontines/{id}:
    *   get:
    *     tags:
    *       - Tontines
@@ -118,7 +145,7 @@ export default class TontinesController {
 
   /**
    * @swagger
-   * /tontines/{id}:
+   * /api/tontines/{id}:
    *   put:
    *     tags:
    *       - Tontines
@@ -169,7 +196,7 @@ export default class TontinesController {
 
   /**
    * @swagger
-   * /tontines/{id}:
+   * /api/tontines/{id}:
    *   delete:
    *     tags:
    *       - Tontines

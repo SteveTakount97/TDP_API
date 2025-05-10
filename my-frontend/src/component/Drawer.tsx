@@ -1,7 +1,9 @@
-import { X, PlusCircle, Users, History, CreditCard, Receipt, Bell, Pencil, Trash2, Eye } from 'lucide-react'
+import { X, PlusCircle, Users, History, CreditCard, Receipt, Bell, Pencil, Trash2, Eye, Send, UserX, FileText, Settings } from 'lucide-react'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
-import { label } from 'framer-motion/client'
+import { useRouter } from 'next/navigation'
+
+
 
 type DrawerProps = {
   activeDrawer: 'tontines' | 'payments' | 'users' | null
@@ -10,11 +12,12 @@ type DrawerProps = {
 
 export default function Drawer({ activeDrawer, closeDrawer }: DrawerProps) {
   if (!activeDrawer) return null
+  const router = useRouter()
 
   const menuItems =
     activeDrawer === 'tontines'
       ? [
-          { icon: <PlusCircle className="w-4 h-4 text-amber-200" />, label: 'Créer une tontine' },
+          { icon: <PlusCircle className="w-4 h-4 text-amber-200" />, label: 'Créer une tontine', path: 'features/tontine/create' },
           { icon: <Users className="w-4 h-4 text-blue-300" />, label: 'Mes groupes' },
           { icon: <History className="w-4 h-4 text-gray-700" />, label: 'Historique' },
           {icon: <Pencil className="w-4 h-4 text-blue-600" />, label: "Modifier une Tontine"},
@@ -25,16 +28,24 @@ export default function Drawer({ activeDrawer, closeDrawer }: DrawerProps) {
       ? [
           { icon: <CreditCard className="w-4 h-4 text-gray-700" />, label: 'Mes paiements' },
           { icon: <Receipt className="w-4 h-4 text-amber-200" />, label: 'Reçus' },
+          { icon: <Send className="w-4 h-4 text-green-500" />, label: "Envoyer de L'argent" },
+          { icon: <Eye className="w-4 h-4 text-gray-700" />, label: "Voir le Detail d'une Transaction"},
           { icon: <Bell className="w-4 h-4 text-red-500" />, label: 'Alertes' },
         ]
          : activeDrawer === 'users'
           ? [
-          { icon: <CreditCard className="w-4 h-4" />, label: 'Mon Compte' },
+          { icon: <FileText className="w-4 h-4 text-green-600" />, label: 'Mes Informations' },
           { icon: <Receipt className="w-4 h-4" />, label: 'Status Payment Reçu' },
-          { icon: <Bell className="w-4 h-4" />, label: 'Alertes' },
+          { icon: <UserX className="w-4 h-4 text-red-600" />, label: "Désactiver Mon Compte"},
+          { icon: <Settings className="w-4 h-4 text-gray-900" />, label: 'Paramètres' },
+          { icon: <Bell className="w-4 h-4 text-red-500" />, label: 'Alertes' },
         ]
       : []
-
+   
+  const handleNavigate = (path: any) => {
+    closeDrawer()
+    router.push(path)
+  }
   return (
     <div className="fixed top-0 right-0  inset-0 z-40 flex" onClick={closeDrawer}>
       {/* Overlay */}
@@ -58,13 +69,13 @@ export default function Drawer({ activeDrawer, closeDrawer }: DrawerProps) {
         </div>
 
         <ul className="space-y-4">
-          {menuItems.map(({ icon, label }, index) => (
+          {menuItems.map(({ icon, label, path }, index) => (
             <li
               key={index}
               className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 text-gray-700 cursor-pointer transition"
             >
               {icon}
-              <span className="text-sm">{label}</span>
+              <button className="text-sm"    onClick={() => handleNavigate(path)}>{label}</button>
             </li>
           ))}
         </ul>
@@ -81,14 +92,14 @@ export default function Drawer({ activeDrawer, closeDrawer }: DrawerProps) {
           height={150}
         />
         </motion.div>
-      <div className="absolute bottom-0 w-full h-20 border-t px-4 py-3 bg-purple flex justify-between items-center bg-gray-400 hover:text-gray-900 transition-colors">
+      <div className="absolute bottom-0 flex-col h-20 border-t px-4 py-3 bg-purple flex justify-between items-center hover:text-gray-900 transition-colors">
        <button
        onClick={closeDrawer}
        className="bg-white text-blue-700 font-semibold px-5 py-2 rounded hover:bg-amber-600 shadow-lg "
       >
           Fermer
         </button>
-      <span className="text-xl text-black">© 2025 MonApp</span>
+      <span className="text-xl text-blue-700">©TDP DIGITALE</span>
       </div>
 
       </div>

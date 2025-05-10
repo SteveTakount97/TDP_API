@@ -46,7 +46,7 @@ export default function DashboardPage() {
   const openDrawer = (type: 'tontines' | 'payments' |'users') => {
     setActiveDrawer(type)
   }
-
+  
   const closeDrawer = () => {
     setActiveDrawer(null)
   }
