@@ -7,17 +7,17 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import axios from 'axios';
 import Features from '@/component/fonctionnalite';
+import Drawer from '@/component/Drawer';
 
 
 type User = {
   fullName: string;
   email: string;
   phoneNumber: string;
-  profile_url: string;
+  profileImageUrl: string;
 };
 
 export default function DashboardPage() {
-
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
@@ -27,7 +27,6 @@ export default function DashboardPage() {
     const storedUser = localStorage.getItem('user');
   
     if (!token || !storedUser) {
-      router.push('/auth/login');
       return;
     }
   
@@ -42,6 +41,15 @@ export default function DashboardPage() {
     }
   }, []);
   
+  const [activeDrawer, setActiveDrawer] = useState<'tontines' | 'payments' | 'users' | null>(null)
+
+  const openDrawer = (type: 'tontines' | 'payments' |'users') => {
+    setActiveDrawer(type)
+  }
+
+  const closeDrawer = () => {
+    setActiveDrawer(null)
+  }
 
   const handleLogout = () => {
     console.log("Déconnexion déclenchée");
@@ -49,13 +57,12 @@ export default function DashboardPage() {
     router.push('/auth/login');
   };
 
-  if (loading) return <div className="h-screen flex items-center justify-center text-xl">Chargement...</div>;
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
   
     const formData = new FormData();
-    formData.append("profile_image_url", file); 
+    formData.append("image", file); 
   
     try {
       const token = localStorage.getItem('token'); 
@@ -68,6 +75,15 @@ export default function DashboardPage() {
       console.log("Payload envoyé :", formData);
       console.log("Photo de profil mise à jour :", response.data);
 
+       // Mettre à jour l'état avec la nouvelle image
+       setUser((prevUser) =>
+        prevUser
+      ? { ...prevUser,profileImageUrl: response.data.imageUrl }
+      : null
+       );
+      // Facultatif : mettre à jour le localStorage
+      const updatedUser = { ...user, profileImageUrl: response.data.imageUrl };
+      localStorage.setItem('user', JSON.stringify(updatedUser));
     } catch (error) {
       console.error("Erreur lors de l'upload de la photo de profil :", error);
     }
@@ -109,11 +125,11 @@ export default function DashboardPage() {
 
     {/* Avatar */}
     <div className="w-32 h-32 rounded-full overflow-hidden border border-gray-300 mb-4">
-      {user?.profile_url ? (
+      {user?.profileImageUrl ? (
         <img
-          src={user.profile_url}
+          src={`http://localhost:3333${user.profileImageUrl}`}
           alt="Photo de profil"
-          className="w-full h-full object-cover"
+          className="w-full h-full "
         />
       ) : (
         <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-500 text-sm">
@@ -183,7 +199,7 @@ export default function DashboardPage() {
                   
 >
   <CardShortcut
-    onClick={() => router.push('/tontines')}
+     onClick={() => openDrawer('tontines')}
     icon={<Banknote className="text-blue-600 w-8 h-8" />}
     title="Tontines"
     description="Créer et gérer vos tontines"
@@ -191,7 +207,7 @@ export default function DashboardPage() {
   />
 
   <CardShortcut
-    onClick={() => router.push('/payments')}
+    onClick={() => openDrawer('payments')}
     icon={<User className="text-green-600 w-8 h-8" />}
     title="Paiements"
     description="Suivre les contributions"
@@ -199,7 +215,7 @@ export default function DashboardPage() {
   />
 
   <CardShortcut
-    onClick={() => router.push('/users')}
+    onClick={() => openDrawer('users')}
     icon={<UsersRound className="text-purple-600 w-8 h-8" />}
     title="Utilisateurs"
     description="Gérer les membres"
@@ -207,6 +223,7 @@ export default function DashboardPage() {
   />
 </motion.div>
   </div>
+   <Drawer activeDrawer={activeDrawer} closeDrawer={closeDrawer} />  
  </section>
  <Features />
     </main>

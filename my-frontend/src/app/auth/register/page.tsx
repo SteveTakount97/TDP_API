@@ -58,7 +58,7 @@ export default function RegisterPage() {
       if (response) {
         alert('Inscription réussie !');
       }
-    
+
       router.push("/acceuil"); 
 
     } catch (error) {

@@ -5,8 +5,8 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import api from '@/lib/axios';
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({
@@ -32,8 +32,9 @@ export default function LoginPage() {
       password: formData.password,
     }
     try {
-      const response = await axios.post('http://localhost:3333/api/login', data);
+      const response = await api.post('http://localhost:3333/api/login', data);
       console.log('Réponse de la requête:', response);
+
       // Vérifier que la réponse contient bien un token
       if (response && response.data && response.data.token.token) {
         // Sauvegarder le token dans le localStorage
@@ -41,6 +42,7 @@ export default function LoginPage() {
         console.log(token);
         localStorage.setItem('token', token);
         localStorage.setItem('user', JSON.stringify(response.data.user)); 
+        console.log('infos user', response.data.user);
   
         alert('Connexion réussie');
   
