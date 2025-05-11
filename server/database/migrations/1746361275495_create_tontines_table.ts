@@ -6,6 +6,7 @@ export default class extends BaseSchema {
   async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
+      table.uuid('created_by').unsigned().references('id').inTable('users').onDelete('CASCADE')
       table.string('name').notNullable()
       table.text('description').nullable()
       table.enum('type', ['rotative', 'solidaire']).defaultTo('rotative')

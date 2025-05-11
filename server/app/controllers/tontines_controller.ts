@@ -1,5 +1,6 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import Tontine from '#models/tontine'
+import TontineMemberShip from '#models/tontine_member_ship'
 import { schema, rules } from '@adonisjs/validator'
 
 export default class TontinesController {
@@ -71,7 +72,7 @@ export default class TontinesController {
    *       401:
    *         description: Non autorisé
    */
-  public async store({ request, response }: HttpContext) {
+  public async store({ request, response, auth }: HttpContext) {
     const tontineSchema = schema.create({
       name: schema.string({}, [rules.maxLength(100)]),
       description: schema.string.optional(),
@@ -83,16 +84,23 @@ export default class TontinesController {
 
     try {
       const data = await request.validate({ schema: tontineSchema })
-
+     //creation de la tontine par le user connecté
       const tontine = await Tontine.create({
         name: data.name,
         description: data.description ?? undefined,
         amountPerCycle: data.amountPerCycle,
         type: data.type,
         frequency: data.frequency,
-        startDate: data.startDate 
+        startDate: data.startDate, 
+        creatorID: auth.user!.id
       })
 
+      // Création du membership (admin)
+    await TontineMemberShip.create({
+      tontineId: tontine.id,
+      userId: auth.user!.id,
+      role: 'admin', // automatiquement défini ici
+    })
       return response.created(tontine)
     } catch (error) {
       if (error.messages) {

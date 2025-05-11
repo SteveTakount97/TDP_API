@@ -55,11 +55,11 @@ router.group(() => {
 
 
   //gestion Tontine
-  router.post('/admin/create', tontineController.store).middleware([new AdminMiddleware().handle])
-  router.get('/admin/tontine', tontineController.index)
-  router.get('/admin/tontine/:id', tontineController.show)
-  router.put('/admin/tontine/!id', tontineController.update)
-  router.delete('/admin/tontine/:id', tontineController.destroy)
+  router.post('/tontines', tontineController.store).middleware([new AdminMiddleware().handle])
+  router.get('/tontine', tontineController.index)
+  router.get('/tontine/:id', tontineController.show)
+  router.put('/tontine/!id', tontineController.update)
+  router.delete('/tontine/:id', tontineController.destroy)
   
 
   //membreship

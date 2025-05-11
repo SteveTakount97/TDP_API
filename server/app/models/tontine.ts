@@ -1,8 +1,9 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
+import { BaseModel, column, hasMany, belongsTo } from '@adonisjs/lucid/orm'
 import * as relations from '@adonisjs/lucid/types/relations'
 import Cycle from './cycle.js'
 import TontineMemberShip from './tontine_member_ship.js'
+import User from './user.js'
 import Paiement from './paiement.js'
 
 
@@ -29,6 +30,9 @@ export default class Tontine extends BaseModel {
   declare startDate: string
 
   @column()
+  declare creatorID: number
+
+  @column()
   declare status: 'actif' | 'termine' | 'en_attente'
 
   @column.dateTime({ autoCreate: true })
@@ -46,5 +50,11 @@ export default class Tontine extends BaseModel {
 
   @hasMany(() => Paiement)
   public payments!: relations.HasMany<typeof Paiement>
+
+  @belongsTo(() => User, {
+  foreignKey: 'created_by',
+  })
+  public creator!: relations.BelongsTo<typeof User>
+
 
 }
