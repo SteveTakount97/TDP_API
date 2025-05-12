@@ -7,6 +7,7 @@ import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import api from '@/lib/axios';
+import axios from 'axios';
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({
@@ -45,7 +46,10 @@ export default function LoginPage() {
         console.log('infos user', response.data.user);
   
         alert('Connexion réussie');
-  
+
+        // Configurer axios avec le token
+         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+
         // Redirection vers la page d'accueil
         router.push('/acceuil');
       } else {

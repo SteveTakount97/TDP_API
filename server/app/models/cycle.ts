@@ -15,11 +15,11 @@ export default class Cycle extends BaseModel {
   @column()
   declare number: number
 
-  @column()
-  declare startDate: string
+  @column.dateTime()
+  declare startDate: DateTime
 
-  @column()
-  declare endDate: string
+  @column.dateTime()
+  declare endDate: DateTime
 
   @column()
   declare beneficiaryId: number | null

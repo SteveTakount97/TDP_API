@@ -47,15 +47,18 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare updatedAt: DateTime | null
   
   //relations 
-  @hasMany(() => TontineMemberShip)
-  public memberships!: relations.HasMany<typeof TontineMemberShip> //Un utilisateur peut appartenir à plusieurs tontines
+  @hasMany(() => TontineMemberShip, {
+  foreignKey: 'user_id', // clé étrangère
+  })
+  public memberships!: relations.HasMany<typeof TontineMemberShip>
+  //Un utilisateur peut appartenir à plusieurs tontines
 
   @hasMany(() => Paiement)
   public payments!: relations.HasMany<typeof Paiement>
 
   @hasManyThrough([() => Tontine, () => TontineMemberShip])
   public tontines!: relations.HasManyThrough<typeof Tontine>
-
+ 
 
   static accessTokens = DbAccessTokensProvider.forModel(User)
 }

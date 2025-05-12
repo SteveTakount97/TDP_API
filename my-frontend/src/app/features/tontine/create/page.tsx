@@ -6,6 +6,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { ArrowLeft } from 'lucide-react'
+import api from '@/lib/axios'
 
 
 interface ErrorBag {
@@ -17,7 +18,7 @@ export default function CreateTontineForm() {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
-    amount: '',
+    amountPerCycle: '',
     frequency: '',
     type: '',
     start_date: '',
@@ -30,27 +31,41 @@ export default function CreateTontineForm() {
     const { name, value } = e.target
     setFormData({ ...formData, [name]: value })
   }
+   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => {
+    const newState = { ...prev, [name]: value };
+    console.log(newState);  // Vérifier l'état mis à jour
+    return newState;
+  });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setErrors({})
 
+  const dataForm = {
+      name: formData.name,
+      description: formData.description,
+      amountPerCycle: Number(formData.amountPerCycle),
+      frequency: formData.frequency,
+      type: formData.type,
+      startDate: formData.start_date,
+  }  
+  console.log('donnée envoyer', dataForm)
     try {
-      const res = await fetch('/api/tontines', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      })
-
-      if (res.ok) {
-        router.push('/tontines') 
-      } else {
-        const data = await res.json()
-        setErrors(data.errors || {})
+      const res = await api.post('http://localhost:3333/api/tontines', dataForm)
+       console.log('donnée envoyer', res);
+      if (res) {
+        router.push('features/tontine') 
+      } 
+      else {
+        setErrors(res|| {})
       }
-    } catch (err) {
-      console.error('Erreur réseau', err)
+    } catch (err:any) {
+      console.error('Erreur réseau', err.response.data)
+       setErrors(err.response.data.errors || {});
     } finally {
       setLoading(false)
     }
@@ -93,6 +108,7 @@ export default function CreateTontineForm() {
           onChange={handleChange}
           placeholder="Ex : Tontine du quartier"
           className="w-full border border-gray-300 rounded px-3 py-2 mt-1"
+          required
         />
         {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name[0]}</p>}
       </div>
@@ -106,6 +122,7 @@ export default function CreateTontineForm() {
           onChange={handleChange}
           className="w-full border border-gray-300 rounded px-3 py-2 mt-1"
           placeholder="Ex : Cette tontine regroupe les membres du quartier..."
+          required
         />
         {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description[0]}</p>}
       </div>
@@ -114,12 +131,13 @@ export default function CreateTontineForm() {
         <label htmlFor="amount">Montant par cycle (FCFA)</label>
         <input
           id="amount"
-          name="amount"
+          name="amountPerCycle"
           type="number"
-          value={formData.amount}
+          value={formData.amountPerCycle}
           onChange={handleChange}
           placeholder="Ex : 100"
           className="w-full border border-gray-300 rounded px-3 py-2 mt-1"
+          required
         />
         {errors.amount && <p className="text-red-500 text-sm mt-1">{errors.amount[0]}</p>}
         </div>
@@ -130,6 +148,7 @@ export default function CreateTontineForm() {
     id="frequency"
     name="frequency"
     value={formData.frequency}
+    onChange={handleSelectChange}
     className="w-full border border-gray-300 rounded px-3 py-2 mt-1"
   >
     <option value="">-- Sélectionnez une fréquence --</option>
@@ -148,6 +167,7 @@ export default function CreateTontineForm() {
     id="type"
     name="type"
     value={formData.type}
+    onChange={handleSelectChange}
     className="w-full border border-gray-300 rounded px-3 py-2 mt-1"
   >
     <option value="">-- Sélectionnez un type --</option>

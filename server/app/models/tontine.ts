@@ -24,13 +24,13 @@ export default class Tontine extends BaseModel {
   declare frequency: 'hebdomadaire' | 'mensuelle' | 'trimestrielle'
 
   @column()
-  declare amountPerCycle: number
+  declare amount_per_cycle: number
+
+  @column.dateTime()
+  declare start_date: DateTime
 
   @column()
-  declare startDate: string
-
-  @column()
-  declare creatorID: number
+  declare created_by: number
 
   @column()
   declare status: 'actif' | 'termine' | 'en_attente'

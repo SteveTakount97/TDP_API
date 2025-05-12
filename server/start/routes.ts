@@ -55,24 +55,24 @@ router.group(() => {
 
 
   //gestion Tontine
-  router.post('/tontines', tontineController.store).middleware([new AdminMiddleware().handle])
+  router.post('/tontines', tontineController.store)
   router.get('/tontine', tontineController.index)
   router.get('/tontine/:id', tontineController.show)
-  router.put('/tontine/!id', tontineController.update)
+  router.put('/tontine/:id', tontineController.update).middleware([new AdminMiddleware().handle])
   router.delete('/tontine/:id', tontineController.destroy)
   
 
   //membreship
-  router.post('mermbership/:id', membershipController.store)
-  router.get('mermbership/:id', membershipController.index)
+  router.post('/mermbership/:id', membershipController.store)
+  router.get('/tontine-memberships', membershipController.index)
   router.get('/membership/:id/users/seach', membershipController.searchUsers)
-  router.put('mermbership/:id', membershipController.update)
-  router.delete('mermbership/:id', membershipController.destroy)
+  router.put('/mermbership/:id', membershipController.update)
+  router.delete('/mermbership/:id', membershipController.destroy)
 
   //paiement
-  router.get('Payment/:id', paiementController.show)
-  router.post('Payment/:id', paiementController.store)
-  router.get('Payment/user/', paiementController.index)
+  router.get('/Payment/:id', paiementController.show)
+  router.post('/Payment/:id', paiementController.store)
+  router.get('/Payment/user', paiementController.index)
   
   //gestion des cycles
   router.post('/Cycle-tontine/', cycleController.store)

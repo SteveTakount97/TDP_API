@@ -59,7 +59,7 @@ export default function RegisterPage() {
         alert('Inscription réussie !');
       }
 
-      router.push("/acceuil"); 
+      router.push("/auth/login"); 
 
     } catch (error) {
       console.error('Erreur lors de l’inscription :', error);

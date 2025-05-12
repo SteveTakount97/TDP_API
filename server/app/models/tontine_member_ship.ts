@@ -10,10 +10,10 @@ export default class TontineMemberShip extends BaseModel {
   declare id: number
   
   @column()
-  declare userId: number
+  declare user_id: number
 
   @column()
-  declare tontineId: number
+  declare tontine_id: number
 
   @column()
   declare role: 'member' | 'admin' | 'treasurer'

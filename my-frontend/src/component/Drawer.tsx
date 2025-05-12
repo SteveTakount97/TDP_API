@@ -20,7 +20,7 @@ export default function Drawer({ activeDrawer, closeDrawer }: DrawerProps) {
           { icon: <PlusCircle className="w-4 h-4 text-amber-200" />, label: 'Créer une tontine', path: 'features/tontine/create' },
           { icon: <Users className="w-4 h-4 text-blue-300" />, label: 'Mes groupes' },
           { icon: <History className="w-4 h-4 text-gray-700" />, label: 'Historique' },
-          {icon: <Pencil className="w-4 h-4 text-blue-600" />, label: "Modifier une Tontine"},
+          {icon: <Pencil className="w-4 h-4 text-blue-600" />, label: "Modifier une Tontine", path: 'features/tontine'},
           {icon: <Trash2 className="w-4 h-4 text-red-600" />, label: 'Supprimer une Tontine'},
           { icon: <Eye className="w-4 h-4 text-gray-700" />, label: 'Voir le Detail d/une Tontine'},
         ]

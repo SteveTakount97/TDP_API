@@ -6,11 +6,11 @@ import User from '#models/user'
 export default class TontineMembershipsController {
   /**
    * @swagger
-   * /tontine-memberships:
+   * /tontine-memberships/:id:
    *   get:
    *     tags:
    *       - TontineMemberships
-   *     summary: Liste des adhésions aux tontines d'un utilisateur
+   *     summary: Liste des membres d'une Tontine
    *     security:
    *       - bearerAuth: []
    *     responses:
@@ -28,23 +28,52 @@ export default class TontineMembershipsController {
   /**
    * Voir les tontines affiliés
    */
-  public async index({ request, response }: HttpContext) {
-    try {
-      const userId = request.input('userId')
-      const query = TontineMemberShip.query()
-        .preload('tontine')
-        .preload('user')
+ public async index({ auth, params, response }: HttpContext) {
+    const user = auth.authenticate()
+    const tontineId = params.id
+    
+      // Vérification si tontineId est défini
+  if (!tontineId) {
+    return response.badRequest({ message: "ID de la tontine manquant." })
+  }
 
-      if (userId) {
-        query.where('user_id', userId)
+    try {
+      // Vérifie que l'utilisateur est membre de cette tontine
+      const membership = await (await user)
+        .related('memberships')
+        .query()
+        .where('tontine_id', tontineId)
+        .first()
+
+      if (!membership) {
+        return response.unauthorized({ message: "Vous n'avez pas accès à cette tontine." })
       }
 
-      const memberships = await query
-      return response.ok(memberships)
+      // Récupère tous les membres de la tontine avec leur rôle
+      const members = await TontineMemberShip
+        .query()
+        .where('tontine_id', tontineId)
+        .preload('user') // pour avoir le nom du membre
+
+      // Formate la réponse
+      const formatted = members.map(m => ({
+        name: m.user.full_name,
+        role: m.role,
+      }))
+
+      return response.ok(formatted)
     } catch (error) {
-      return response.internalServerError({ message: error.message })
+        console.error('Erreur dans le contrôleur membres:', error)
+
+  return response.status(500).send({
+    message: 'Une erreur interne est survenue lors de la récupération des membres.',
+    error: error.message,
+    name: error.name,
+    stack: process.env.NODE_ENV === 'development' ? error.stack : undefined,
+  })
     }
   }
+
   /**
  * @swagger
  * /tontines/:id/users/seach:
@@ -148,8 +177,8 @@ export default class TontineMembershipsController {
   // Vérifie si l'utilisateur est déjà membre
   const existing = await TontineMemberShip
     .query()
-    .where('userId', user_id)
-    .andWhere('tontineId', tontine_id)
+    .where('user_id', user_id)
+    .andWhere('tontine_id', tontine_id)
     .first()
 
   if (existing) {
@@ -158,9 +187,9 @@ export default class TontineMembershipsController {
 
   try {
     const membership = await TontineMemberShip.create({
-      userId: user_id,
-      tontineId: tontine_id,
-      role, // attention à ce que `role` soit bien dans les valeurs autorisées
+      user_id: user_id,
+      tontine_id: tontine_id,
+      role, 
     })
 
     return response.created(membership)
