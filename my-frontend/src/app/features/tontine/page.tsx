@@ -4,10 +4,11 @@ import { useEffect, useState } from 'react'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Users, CalendarCheck, RotateCw } from 'lucide-react'
+import { CalendarCheck, RotateCw, PlusCircle, Edit, Eye, Trash, Users } from 'lucide-react'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import api from '@/lib/axios'
+
 
 interface Tontine {
   id: string
@@ -34,7 +35,6 @@ interface Cycle {
 
 export default function TontinePage() {
   const [tontines, setTontine] =  useState<Tontine[]>([]);
-  const [members, setMembers] = useState<Member[]>([])
   const [cycles, setCycles] = useState<Cycle[]>([])
 
   useEffect(() => {
@@ -50,10 +50,10 @@ export default function TontinePage() {
   }
    const fetchmember = async () => {
     try {
-      const member = await api.get("/tontine-memberships") 
-      const memberData = member.data[0] 
-      setMembers(memberData)
-      console.log('data', memberData)
+      const cycles = await api.get("/Cycle-tontine") 
+      const cycleData = cycles.data
+      setCycles(cycleData)
+      console.log('data', cycleData)
     } catch (error: any) {
        const errormessage = error.response?.data?.message || error.message || 'Erreur inconnue'
      console.error('Erreur lors du fetch des membres de la tontine:', errormessage)
@@ -64,75 +64,79 @@ export default function TontinePage() {
   }, [])
 
   return (
-    <div className="p-6 max-w-6xl mx-auto space-y-6 ">
-      <h1 className="text-4xl font-bold text-gray-800">Tontine</h1>
-
-{tontines.length > 0 ? (
-  tontines.map((tontine) => (
-    <Card key={tontine.id} className="shadow-md border rounded-xl mb-4">
-      <CardContent className="p-6 space-y-4 cursor-pointer">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
-          <div>
-            <h2 className="text-2xl font-semibold text-gray-900">{tontine.name}</h2>
-            <p className="text-sm text-gray-500 mt-1">{tontine.description}</p>
-          </div>
-          <Badge className="text-xs mt-2 md:mt-0" variant="outline">
-            {tontine.type}
-          </Badge>
+    <div className="min-h-screen text-white">
+      {/* Header */}
+      <header className="bg-white shadow-md">
+        <Link href="/acceuil" className="flex items-center text-black hover:underline absolute top-4 left-4 ">
+       <ArrowLeft className="w-5 h-5 mr-1" />
+       Retour 
+       </Link>
+        <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+          <h1 className="text-3xl font-bold text-gray-800">Mes Tontines</h1>
+          <Link href="/features/create" className="flex items-center gap-2 text-black bg-primary hover:bg-primary/90 px-4 py-2 rounded-lg text-sm shadow-sm transition">
+            <PlusCircle className="w-4 h-4 bg-green-600 text-purple-800" />
+            Nouvelle tontine
+          </Link>
         </div>
+      </header>
+       
+      {/* Contenu principal */}
+      <main className="p-6 max-w-6xl mx-auto space-y-6">
+        {tontines.length > 0 ? (
+          tontines.map((tontine) => (
+            <Card key={tontine.id} className="shadow-sm border border-gray-200 rounded-2xl hover:shadow-md transition duration-200">
+              <CardContent className="p-6 space-y-4 cursor-pointer">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
+                  <div>
+                    <h2 className="text-xl font-semibold text-gray-900">{tontine.name}</h2>
+                    <p className="text-sm text-gray-500 mt-1">{tontine.description}</p>
+                  </div>
+                  <Badge className="text-xs mt-2 md:mt-0 capitalize" variant="outline">
+                    {tontine.type}
+                  </Badge>
+                </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          <div className="flex items-center gap-2 text-sm text-gray-700">
-            <RotateCw className="h-4 w-4 text-primary" />
-            <span>Montant / cycle : <strong>{tontine.amountPerCycle} €</strong></span>
-          </div>
-          <div className="flex items-center gap-2 text-sm text-gray-700">
-            <CalendarCheck className="h-4 w-4 text-primary" />
-            <span>Fréquence : <strong>{tontine.frequency}</strong></span>
-          </div>
-          <div className="flex items-center gap-2 text-sm text-gray-700">
-            <CalendarCheck className="h-4 w-4 text-primary" />
-            <span>Début : <strong>{new Date(tontine.startDate).toLocaleDateString()}</strong></span>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  ))
-) : (
-  <p className="text-gray-500">Aucune tontine trouvée.</p>
-)}
-    
-      <Tabs defaultValue="members" className="w-full">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-sm text-gray-700">
+                  <div className="flex items-center gap-2">
+                    <RotateCw className="h-4 w-4 text-primary" />
+                    <span>Montant / cycle : <strong>{tontine.amountPerCycle} €</strong></span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CalendarCheck className="h-4 w-4 text-primary" />
+                    <span>Fréquence : <strong>{tontine.frequency}</strong></span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CalendarCheck className="h-4 w-4 text-primary" />
+                    <span>Début : <strong>{new Date(tontine.startDate).toLocaleDateString()}</strong></span>
+                  </div>
+                </div>
+                 <div className="flex gap-4 mt-4">
+                  <button className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900">
+                    <Edit className="h-5 w-5" />
+                    Modifier
+                  </button>
+                  <button className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900">
+                    <Eye className="h-5 w-5" />
+                    Voir le détail
+                  </button>
+                  <button className="flex items-center gap-2 text-sm text-red-600 hover:text-red-800">
+                    <Trash className="h-5 w-5" />
+                    Supprimer
+                  </button>
+                 </div> 
+              </CardContent>
+            </Card>
+          ))
+        ) : (
+          <p className="text-gray-500 text-center mt-12">Aucune tontine trouvée.</p>
+        )}
+        <Tabs defaultValue="members" className="w-full text-black">
         <TabsList className="mb-4 gap-4">
-          <TabsTrigger value="members" className="flex items-center gap-1">
-            <Users className="h-4 w-4" />
-            Membres
-          </TabsTrigger>
           <TabsTrigger value="cycles" className="flex items-center gap-1">
             <RotateCw className="h-4 w-4" />
-            Cycles
+            Cycles Tontines
           </TabsTrigger>
         </TabsList>
-
-        <TabsContent value="members">
-          <Card className="rounded-lg border shadow-sm">
-            <CardContent className="p-5">
-              <h3 className="text-lg font-semibold mb-4 text-gray-800">Liste des membres</h3>
-              <ul className="space-y-3">
-                {members.map((member) => (
-                  <li
-                    key={member.id}
-                    className="flex justify-between items-center px-4 py-2 rounded-lg border hover:bg-gray-50 transition"
-                  >
-                    <span className="text-sm font-medium text-gray-700">{member.name}</span>
-                    <Badge variant="secondary" className="text-xs">{member.role}</Badge>
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
         <TabsContent value="cycles">
           <Card className="rounded-lg border shadow-sm">
             <CardContent className="p-5">
@@ -157,6 +161,7 @@ export default function TontinePage() {
           </Card>
         </TabsContent>
       </Tabs>
+      </main>
     </div>
   )
 }

@@ -77,7 +77,7 @@ router.group(() => {
   //gestion des cycles
   router.post('/Cycle-tontine/', cycleController.store)
   router.get('/Cycle-tontine/:id', cycleController.show)
-  router.get('/Cycle-tontine/', cycleController.index)
+  router.get('/Cycle-tontine', cycleController.index)
 
   // Logs de transactions
   router.get('/transaction/user/:id', transactionController.index)
