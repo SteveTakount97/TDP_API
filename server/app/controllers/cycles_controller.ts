@@ -4,7 +4,7 @@ import Cycle from '#models/cycle'
 export default class CyclesController {
   /**
    * @swagger
-   * /cycles:
+   * /api/Cycle-tontine:
    *   get:
    *     tags:
    *       - Cycles
@@ -84,7 +84,7 @@ export default class CyclesController {
 
   /**
    * @swagger
-   * /cycles/{id}:
+   * /api/Cycle-tontine/{id}:
    *   get:
    *     tags:
    *       - Cycles

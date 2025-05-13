@@ -18,11 +18,11 @@ export default function Drawer({ activeDrawer, closeDrawer }: DrawerProps) {
     activeDrawer === 'tontines'
       ? [
           { icon: <PlusCircle className="w-4 h-4 text-amber-200" />, label: 'Créer une tontine', path: 'features/tontine/create' },
-          { icon: <Users className="w-4 h-4 text-blue-300" />, label: 'Mes groupes' },
+          { icon: <Users className="w-4 h-4 text-blue-300" />, label: 'Mes groupes', path: 'features/tontine' },
           { icon: <History className="w-4 h-4 text-gray-700" />, label: 'Historique' },
           {icon: <Pencil className="w-4 h-4 text-blue-600" />, label: "Modifier une Tontine", path: 'features/tontine'},
           {icon: <Trash2 className="w-4 h-4 text-red-600" />, label: 'Supprimer une Tontine'},
-          { icon: <Eye className="w-4 h-4 text-gray-700" />, label: 'Voir le Detail d/une Tontine'},
+          { icon: <Eye className="w-4 h-4 text-gray-700" />, label: "Voir le Detail d'une Tontine"},
         ]
       : activeDrawer === 'payments'
       ? [
@@ -75,7 +75,7 @@ export default function Drawer({ activeDrawer, closeDrawer }: DrawerProps) {
               className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 text-gray-700 cursor-pointer transition"
             >
               {icon}
-              <button className="text-sm"    onClick={() => handleNavigate(path)}>{label}</button>
+              <button className="text-sm cursor-pointer"    onClick={() => handleNavigate(path)}>{label}</button>
             </li>
           ))}
         </ul>
@@ -95,7 +95,7 @@ export default function Drawer({ activeDrawer, closeDrawer }: DrawerProps) {
       <div className="absolute bottom-0 flex-col h-20 border-t px-4 py-3 bg-purple flex justify-between items-center hover:text-gray-900 transition-colors">
        <button
        onClick={closeDrawer}
-       className="bg-white text-blue-700 font-semibold px-5 py-2 rounded hover:bg-amber-600 shadow-lg "
+       className="bg-white text-blue-700 font-semibold px-5 py-2 rounded hover:bg-amber-600 shadow-lg cursor-pointer "
       >
           Fermer
         </button>

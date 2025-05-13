@@ -74,7 +74,7 @@ export default function CreateTontineForm() {
   return (
     <>
     <div className='flex justify-center'>
-     <Link href="/acceuil" className="flex items-center text-white hover:underline absolute top-4 left-4 ">
+     <Link href="/acceuil" className="flex items-center text-black hover:underline absolute top-4 left-4 ">
        <ArrowLeft className="w-5 h-5 mr-1" />
        Retour
        </Link>

@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { CalendarCheck, RotateCw, PlusCircle, Edit, Eye, Trash, Users } from 'lucide-react'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import api from '@/lib/axios'
 
 
@@ -37,6 +38,7 @@ export default function TontinePage() {
   const [tontines, setTontine] =  useState<Tontine[]>([]);
   const [cycles, setCycles] = useState<Cycle[]>([])
 
+
   useEffect(() => {
     const fetchtontine = async () => {
     try {
@@ -48,7 +50,7 @@ export default function TontinePage() {
       console.error('Erreur lors du fetch de la tontine:', error.tontine?.data || error.message)
     }
   }
-   const fetchmember = async () => {
+   const fetchCycle = async () => {
     try {
       const cycles = await api.get("/Cycle-tontine") 
       const cycleData = cycles.data
@@ -60,9 +62,14 @@ export default function TontinePage() {
     }
   }
   fetchtontine()
-  fetchmember()
+  fetchCycle()
   }, [])
+ 
+ const router = useRouter();
 
+  const handleClick = (id: string) => {
+    router.push(`/features/member/${id}/members`);
+  };
   return (
     <div className="min-h-screen text-white">
       {/* Header */}
@@ -73,9 +80,9 @@ export default function TontinePage() {
        </Link>
         <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
           <h1 className="text-3xl font-bold text-gray-800">Mes Tontines</h1>
-          <Link href="/features/create" className="flex items-center gap-2 text-black bg-primary hover:bg-primary/90 px-4 py-2 rounded-lg text-sm shadow-sm transition">
+          <Link href="/features/tontine/create" className="flex items-center gap-2 text-black bg-primary hover:bg-primary/90 px-4 py-2 rounded-lg text-sm shadow-sm transition">
             <PlusCircle className="w-4 h-4 bg-green-600 text-purple-800" />
-            Nouvelle tontine
+            Créer Une Nouvelle tontine
           </Link>
         </div>
       </header>
@@ -91,7 +98,7 @@ export default function TontinePage() {
                     <h2 className="text-xl font-semibold text-gray-900">{tontine.name}</h2>
                     <p className="text-sm text-gray-500 mt-1">{tontine.description}</p>
                   </div>
-                  <Badge className="text-xs mt-2 md:mt-0 capitalize" variant="outline">
+                  <Badge className="text-xs mt-2 md:mt-0 capitalize text-green-500" variant="outline">
                     {tontine.type}
                   </Badge>
                 </div>
@@ -110,16 +117,16 @@ export default function TontinePage() {
                     <span>Début : <strong>{new Date(tontine.startDate).toLocaleDateString()}</strong></span>
                   </div>
                 </div>
-                 <div className="flex gap-4 mt-4">
-                  <button className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900">
+                 <div className="flex gap-4 mt-4 cursor-pointer">
+                  <button className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 cursor-pointer">
                     <Edit className="h-5 w-5" />
                     Modifier
                   </button>
-                  <button className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900">
-                    <Eye className="h-5 w-5" />
-                    Voir le détail
+                  <button onClick={() => handleClick(tontine.id)} className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 cursor-pointer">
+                    <Users className="h-5 w-5" />
+                    Voir les membres
                   </button>
-                  <button className="flex items-center gap-2 text-sm text-red-600 hover:text-red-800">
+                  <button className="flex items-center gap-2 text-sm text-red-600 hover:text-red-800 cursor-pointer">
                     <Trash className="h-5 w-5" />
                     Supprimer
                   </button>
@@ -132,7 +139,7 @@ export default function TontinePage() {
         )}
         <Tabs defaultValue="members" className="w-full text-black">
         <TabsList className="mb-4 gap-4">
-          <TabsTrigger value="cycles" className="flex items-center gap-1">
+          <TabsTrigger value="cycles" className="flex items-center gap-1 hover:text-red-500 cursor-pointer shadow-2xl">
             <RotateCw className="h-4 w-4" />
             Cycles Tontines
           </TabsTrigger>
@@ -140,19 +147,19 @@ export default function TontinePage() {
         <TabsContent value="cycles">
           <Card className="rounded-lg border shadow-sm">
             <CardContent className="p-5">
-              <h3 className="text-lg font-semibold mb-4 text-gray-800">Historique des cycles</h3>
+              <h3 className="text-lg font-semibold mb-4 text-gray-800 cursor-pointer">Historique des cycles</h3>
               <ul className="space-y-3">
                 {cycles.map((cycle) => (
                   <li
                     key={cycle.id}
                     className="border rounded-lg p-4 text-sm hover:bg-gray-50 transition"
                   >
-                    <div className="flex justify-between items-center">
-                      <span className="text-gray-700">
+                    <div className="flex justify-between items-center cursor-pointer">
+                      <span className="text-black ">
                         Période : {new Date(cycle.startDate).toLocaleDateString()} -{' '}
                         {new Date(cycle.endDate).toLocaleDateString()}
                       </span>
-                      <Badge className="text-xs capitalize">{cycle.status}</Badge>
+                      <Badge className="text-xs capitalize text-green-600 cursor-pointer">{cycle.status}</Badge>
                     </div>
                   </li>
                 ))}

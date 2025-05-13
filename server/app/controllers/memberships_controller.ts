@@ -6,7 +6,7 @@ import User from '#models/user'
 export default class TontineMembershipsController {
   /**
    * @swagger
-   * /tontine-memberships/:id:
+   * /api/tontine-memberships/:id:
    *   get:
    *     tags:
    *       - TontineMemberships
