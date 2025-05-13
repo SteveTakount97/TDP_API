@@ -64,7 +64,7 @@ router.group(() => {
 
   //membreship
   router.post('/mermbership/:id', membershipController.store)
-  router.get('/tontine-memberships/$(id)', membershipController.index)
+  router.get('/tontine-memberships/:id', membershipController.index)
   router.get('/membership/:id/users/seach', membershipController.searchUsers)
   router.put('/mermbership/:id', membershipController.update)
   router.delete('/mermbership/:id', membershipController.destroy)

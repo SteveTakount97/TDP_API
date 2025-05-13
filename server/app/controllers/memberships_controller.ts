@@ -6,7 +6,7 @@ import User from '#models/user'
 export default class TontineMembershipsController {
   /**
    * @swagger
-   * /api/tontine-memberships/:id:
+   * /api/tontine-memberships/${id}:
    *   get:
    *     tags:
    *       - TontineMemberships
@@ -177,7 +177,7 @@ export default class TontineMembershipsController {
   // Vérifie si l'utilisateur est déjà membre
   const existing = await TontineMemberShip
     .query()
-    .where('user_id', user_id)
+    .where('userId', user_id)
     .andWhere('tontine_id', tontine_id)
     .first()
 

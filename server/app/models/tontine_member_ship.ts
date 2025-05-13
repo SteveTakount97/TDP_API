@@ -9,10 +9,10 @@ export default class TontineMemberShip extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
   
-  @column()
+  @column({ columnName: 'user_id' })
   declare user_id: number
 
-  @column()
+  @column({ columnName: 'tontine_id' })
   declare tontine_id: number
 
   @column()
@@ -34,10 +34,15 @@ export default class TontineMemberShip extends BaseModel {
   declare updatedAt: DateTime
 
   //relations tables 
-  @belongsTo(() => User)
-  public user!: relations.BelongsTo<typeof User>
+ @belongsTo(() => User, {
+  foreignKey: 'user_id', //clé étrangère
+  })
+ public user!: relations.BelongsTo<typeof User>
 
-  @belongsTo(() => Tontine)
+
+  @belongsTo(() => Tontine, {
+  foreignKey: 'tontine_id', 
+  })
   public tontine!: relations.BelongsTo<typeof Tontine>
 
   static schema: any

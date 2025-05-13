@@ -68,7 +68,7 @@ export default function TontinePage() {
  const router = useRouter();
 
   const handleClick = (id: string) => {
-    router.push(`/features/member/${id}/members`);
+    router.push(`/features/member/${id}`);
   };
   return (
     <div className="min-h-screen text-white">
