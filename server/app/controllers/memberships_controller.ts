@@ -133,7 +133,7 @@ export default class TontineMembershipsController {
   }
   /**
    * @swagger
-   * /tontine-memberships:
+   * /tontine-memberships/:id:
    *   post:
    *     tags:
    *       - TontineMemberships
@@ -147,9 +147,9 @@ export default class TontineMembershipsController {
    *           schema:
    *             type: object
    *             required:
-   *               - userId
-   *               - tontineId
-   *               - roleId
+   *               - full_name
+   *               - tontine_id
+   *               - role
    *             properties:
    *               userId:
    *                 type: integer
@@ -177,7 +177,7 @@ export default class TontineMembershipsController {
   // Vérifie si l'utilisateur est déjà membre
   const existing = await TontineMemberShip
     .query()
-    .where('userId', user_id)
+    .where('user_id', user_id)
     .andWhere('tontine_id', tontine_id)
     .first()
 

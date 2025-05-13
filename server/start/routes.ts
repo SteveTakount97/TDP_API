@@ -47,6 +47,7 @@ router.post('api/logout', authController.logout)
 router.group(() => {
 
   //gestion des utilisateurs
+  router.get('/users', userController.CallUsers)
   router.post('/users/image/', userController.uploadProfileImage)
   router.get('/user/', userController.index) 
   router.get('/user/:id', userController.show) 
@@ -63,7 +64,7 @@ router.group(() => {
   
 
   //membreship
-  router.post('/mermbership/:id', membershipController.store)
+  router.post('/tontine-memberships/:id', membershipController.store)
   router.get('/tontine-memberships/:id', membershipController.index)
   router.get('/membership/:id/users/seach', membershipController.searchUsers)
   router.put('/mermbership/:id', membershipController.update)

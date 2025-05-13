@@ -61,6 +61,44 @@ export default class UsersController {
   }
 /**
  * @swagger
+ * /api/users:
+ *   get:
+ *     tags:
+ *       - Users
+ *     summary: Récupérer tous les utilisateurs
+ *     description: Retourne la liste de tous les utilisateurs enregistrés. Nécessite une authentification.
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Liste des utilisateurs
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/User'
+ *       401:
+ *         description: Utilisateur non authentifié
+ *       500:
+ *         description: Erreur serveur
+ */
+  public async CallUsers ({auth, response}: HttpContext) {
+     const user = await auth.authenticate()
+
+     if (!user){
+      return response.unauthorized ("Vous n'êtes pas Autoriser à poursuivre cetteaction")
+     }
+    try{
+      const AllUsers = await User.all()
+      return response.ok(AllUsers)
+    }catch(error){
+      return response.internalServerError({message: 'Erreur lors de la recupération des utilisateurs', error})
+    }
+    
+  }
+/**
+ * @swagger
  * /api/users/{id}:
  *   get:
  *     tags:
