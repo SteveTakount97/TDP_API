@@ -16,6 +16,7 @@ import server from '@adonisjs/core/services/server'
 import setupSwagger from './swagger.js'
 
 
+
 export const serverMiddleware = [
   setupSwagger,
 ]
@@ -48,5 +49,6 @@ router.use([() => import('@adonisjs/core/bodyparser_middleware'), () => import('
  * the routes or the routes group.
  */
 export const middleware = router.named({
-  auth: () => import('#middleware/auth_middleware')
+  auth: () => import('#middleware/auth_middleware'),
+  admin: () => import('#middleware/admin_middleware')
 })

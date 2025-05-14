@@ -61,6 +61,7 @@ export default class TontineMembershipsController {
         name: m.user.full_name,
         role: m.role,
         id: m.id,
+        tontine_id: tontineId,
       }))
 
       return response.ok(formatted)
@@ -316,7 +317,7 @@ export default class TontineMembershipsController {
  /**
   /**
    * @swagger
-   * /tontine-memberships/{id}:
+   * /tontine-memberships/:id/tontine/${id}:
    *   delete:
    *     tags:
    *       - TontineMemberships
@@ -346,10 +347,18 @@ export default class TontineMembershipsController {
    * Retirer un utilisateur d’une tontine
    */
  public async destroy({ params, response }: HttpContext) {
-  
-    try {
-      const membership = await TontineMemberShip.findOrFail(params.id)
+    const { tontineId, memberId } = params
 
+    try {
+      const membership = await TontineMemberShip
+      .query()
+      .where('id', memberId)
+      .andWhere('tontine_id', tontineId)
+      .first()
+      
+      if (!membership) {
+      return response.notFound({ message: 'Membre non trouvé dans cette tontine' })
+     }
       await membership.delete()
 
       return response.ok({

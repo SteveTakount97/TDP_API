@@ -64,11 +64,11 @@ router.group(() => {
   
 
   //membreship
-  router.post('/tontine-memberships/:id', membershipController.store)
+  router.post('/tontine-memberships/:memberId/tontine/:tontineId', membershipController.store).middleware([new AdminMiddleware().handle])
   router.get('/tontine-memberships/:id', membershipController.index)
   router.get('/membership/:id/users/seach', membershipController.searchUsers)
-  router.put('/tontine-memberships/:id', membershipController.update)
-  router.delete('/tontine-memberships/:id', membershipController.destroy).middleware([new AdminMiddleware().handle])
+  router.put('/tontine-memberships/:tontineMembershipId/tontine/:tontineId', membershipController.update).middleware([new AdminMiddleware().handle])
+  router.delete('/tontine-memberships/:memberId/tontine/:tontineId', membershipController.destroy).middleware([new AdminMiddleware().handle])
 
   //paiement
   router.get('/Payment/:id', paiementController.show)

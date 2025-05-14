@@ -8,6 +8,8 @@ import { Users, PlusCircle, Edit, Trash } from "lucide-react"
 import api from "@/lib/axios"
 import { useParams } from "next/navigation"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
+import { ArrowLeft } from "lucide-react"
 
 
 
@@ -21,7 +23,7 @@ type Member = {
   id: number
   name: string
   role: string
-  tontineId: number
+  tontine_id: number
 }
 
 export default function TontineTabs() {
@@ -87,13 +89,15 @@ useEffect(() => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    const memberId = selectedUser?.id
     if (!selectedUser) {
 
       alert("Veuillez sélectionner un utilisateur dans la liste.");
       return
     }
+
     try {
-      await api.post(`/tontine-memberships/${tontineId}`, {
+      await api.post(`/tontine-memberships/${memberId}/tontine/${tontineId}`, {
         user_id: selectedUser?.id,
         tontine_id: tontineId,
         role,
@@ -127,7 +131,7 @@ useEffect(() => {
       alert("aucun id selectionné")
     }
     try {
-      await api.put(`/tontine-memberships/${tontineMembershipId}`,{
+      await api.put(`/tontine-memberships/${tontineMembershipId}/tontine/${tontineId}`,{
         role: newRole,
     })
     alert('Role du membre mis à jour')
@@ -138,16 +142,16 @@ useEffect(() => {
   }
   }
   //fonction pour supprimer un membre de la tontine 
-  const handleDeleteMember = async () => {
-     const tontineMembershipId = deleteingMember?.id
-    if (!tontineMembershipId){
+  const handleDeleteMember = async (member: any) => {
+    const memberId = deleteingMember?.id
+    if (!memberId){
       alert("aucun id selectionné")
     }
     try{
-      await api.delete(`/tontine-memberships/${tontineMembershipId}`)
+      await api.delete(`/tontine-memberships/${memberId}/tontine/${tontineId}`)
       
       alert('membre supprimé avec succès')
-      setMembers (prevMembers => prevMembers.filter(m => m.id !== tontineMembershipId))
+      setMembers (prevMembers => prevMembers.filter(m => m.id !== memberId))
       setdeletingMember(null)
     } catch(error){
       console.error ("erreur lors de la suppréssion", error)
@@ -155,15 +159,22 @@ useEffect(() => {
     }
   }
   return (
-    <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 min-h-screen">
-      <header className="mb-8 text-center shadow-md w-full ">
+    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 min-h-screen">
+      <header className="mb-8 text-center shadow-md w-full pb-2 ">
+         <Link
+        href="/features/tontine"
+        className="flex items-center text-black hover:underline shadow-2xl w-20 rounded-2xl"
+         >
+      <ArrowLeft className="w-5 h-5 mr-1" />
+      Retour
+          </Link>
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Gestion des membres</h1>
         <p className="text-gray-600 text-sm mb-2">
           Retrouvez ici la liste des membres liés à cette tontine, avec leur rôle respectif.
         </p>
         <button
           onClick={() => setIsOpen(true)}
-          className="m-auto justify-center flex items-center gap-2 text-white font-bold bg-green-400 hover:text-xl px-4 py-2 rounded-lg text-sm shadow-2xl transition cursor-pointer border-green-300 border"
+          className="m-auto flex items-center gap-2 text-white font-bold bg-green-400 hover:text-xl px-4 py-2 rounded-lg text-sm shadow-2xl transition cursor-pointer border-green-300"
         >
           <PlusCircle className="w-4 h-4 bg-green-600" />
           Ajouter Un Membre
