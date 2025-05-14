@@ -4,10 +4,11 @@ import { useEffect, useState } from "react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Users, PlusCircle } from "lucide-react"
+import { Users, PlusCircle, Edit, Trash } from "lucide-react"
 import api from "@/lib/axios"
-import BackLink from "@/component/flechback"
 import { useParams } from "next/navigation"
+import { useRouter } from "next/navigation"
+
 
 
 type User = {
@@ -26,15 +27,25 @@ type Member = {
 export default function TontineTabs() {
   const [members, setMembers] = useState<Member[]>([])
   const [users, setUsers] = useState<User[]>([])
+
+  //state pour stocker les données users
   const [filteredUsers, setFilteredUsers] = useState<User[]>([])
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
   const [role, setRole] = useState('member')
   const [search, setSearch] = useState('')
   const [isOpen, setIsOpen] = useState(false)
 
+  //state pour modifier le role d'un membre dans une tontine
+  const [editingMember, setEditingMember] = useState<Member | null>(null)
+  const [newRole, setNewRole] = useState<string>('member')
+
+  //state pour la suppression
+  const [deleteingMember, setdeletingMember] = useState<Member | null>(null)
+  const router = useRouter()
   const params = useParams()
   const tontineId = params?.id
-  console.log('idtontone', tontineId)
+ 
+  console.log('tontineId', tontineId)
 
   // Récupérer les membres de la tontine
   useEffect(() => {
@@ -42,6 +53,7 @@ export default function TontineTabs() {
       try {
         const { data } = await api.get(`/tontine-memberships/${tontineId}`)
         setMembers(data)
+        console.log('members', data)
       } catch (error: any) {
         console.error("Erreur lors du chargement des membres :", error.message)
       }
@@ -87,6 +99,7 @@ useEffect(() => {
         role,
       })
       alert('Membre ajouté avec succès')
+      router.push('/features/tontine')
       setIsOpen(false)
     } catch (err: any) {
       console.error(err)
@@ -94,22 +107,63 @@ useEffect(() => {
     }
   }
   //fonction pour sélectionné un user
- const handleSelectUser = (user: any) => {
+  const handleSelectUser = (user: any) => {
   setSelectedUser(user) // stocke l'utilisateur sélectionné
   setSearch(user.fullName) // affiche son nom dans le champ
   setFilteredUsers([]) // vide la liste déroulante après sélection
-}
+   }
+   //fonction pour edit le role d'un membre
+  const handleEditRole = (member: any) => {
+  setEditingMember(member)
+  setNewRole(member.role)
+   }
+  const handleDelete = (member: any) =>{
+    setdeletingMember(member)
+  }
+  //fonction pour modifier un role
+  const handleUpdateRole = async () => {
+    const tontineMembershipId = editingMember?.id
+    if (!tontineMembershipId){
+      alert("aucun id selectionné")
+    }
+    try {
+      await api.put(`/tontine-memberships/${tontineMembershipId}`,{
+        role: newRole,
+    })
+    alert('Role du membre mis à jour')
+    setEditingMember(null)
+  } catch(error:any){
+    console.log("erreur lors de la mise à jour", error.message)
+    alert("Erreur lors de la mis à jour du role")
+  }
+  }
+  //fonction pour supprimer un membre de la tontine 
+  const handleDeleteMember = async () => {
+     const tontineMembershipId = deleteingMember?.id
+    if (!tontineMembershipId){
+      alert("aucun id selectionné")
+    }
+    try{
+      await api.delete(`/tontine-memberships/${tontineMembershipId}`)
+      
+      alert('membre supprimé avec succès')
+      setMembers (prevMembers => prevMembers.filter(m => m.id !== tontineMembershipId))
+      setdeletingMember(null)
+    } catch(error){
+      console.error ("erreur lors de la suppréssion", error)
+      alert("Une erreur est survenue lors de la suppression")
+    }
+  }
   return (
     <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 min-h-screen">
-      <header className="mb-8 text-center shadow-md">
-        <BackLink />
+      <header className="mb-8 text-center shadow-md w-full ">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Gestion des membres</h1>
-        <p className="text-gray-600 text-sm">
+        <p className="text-gray-600 text-sm mb-2">
           Retrouvez ici la liste des membres liés à cette tontine, avec leur rôle respectif.
         </p>
         <button
           onClick={() => setIsOpen(true)}
-          className="flex items-center gap-2 text-black bg-primary hover:bg-primary/90 px-4 py-2 rounded-lg text-sm shadow-sm transition cursor-pointer"
+          className="m-auto justify-center flex items-center gap-2 text-white font-bold bg-green-400 hover:text-xl px-4 py-2 rounded-lg text-sm shadow-2xl transition cursor-pointer border-green-300 border"
         >
           <PlusCircle className="w-4 h-4 bg-green-600" />
           Ajouter Un Membre
@@ -207,11 +261,22 @@ useEffect(() => {
                         key={member.id}
                         className="flex justify-between items-center px-4 py-2 rounded-lg border border-gray-200 hover:bg-gray-50 transition"
                       >
-                        <span className="text-base font-medium text-gray-700">{member.name}</span>
-                        <Badge variant="secondary" className="text-xs capitalize">
+                      <div className="flex flex-col justify-between sm:flex-row sm:items-center gap-2 sm:gap-4 w-full">
+                        <span className="text-base font-medium text-gray-700 hover:text-2xl cursor-pointer">{member.name}</span>
+                        <Badge variant="secondary" className="text-xs capitalize text-green-600">
                           {member.role}
                         </Badge>
+                      </div>
+                      <button  onClick={() => handleEditRole(member)} className="flex items-center gap-2 text-sm text-gray-600 hover:underline cursor-pointer mr-1">
+                        <Edit className="h-5 w-5 text-gray-800" />
+                        Rôle
+                        </button>
+                        <button  onClick={() => handleDelete(member)} className="flex items-center gap-2 text-sm text-gray-600 hover:underline cursor-pointer">
+                        <Trash className="h-5 w-5 text-red-500" />
+                        Supprimer
+                        </button>
                       </li>
+                      
                     ))}
                   </ul>
                 )}
@@ -220,6 +285,69 @@ useEffect(() => {
           </TabsContent>
         </Tabs>
       </section>
+         {/**modale edit role */}
+  {editingMember && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 animate-fade-in-up">
+      <h2 className="text-xl font-semibold mb-4 text-gray-800">
+        Modifier le rôle de 
+      </h2>
+       <h3 className="text-black font-bold text-xl">{editingMember.name}</h3>
+
+      <div className="mb-4">
+        <label className="block mb-1 text-sm text-gray-600">Nouveau rôle</label>
+        <select
+          value={newRole}
+          onChange={(e) => setNewRole(e.target.value)}
+          className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 cursor-pointer"
+        >
+          <option value="admin">Administrateur</option>
+          <option value="treasurer">Trésorier</option>
+          <option value="member">Membre</option>
+        </select>
+      </div>
+
+      <div className="flex justify-end space-x-3">
+        <button
+          onClick={() => setEditingMember(null)}
+          className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg text-sm cursor-pointer"
+        >
+          Annuler
+        </button>
+        <button
+          onClick={handleUpdateRole}
+          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm cursor-pointer"
+        >
+          Enregistrer
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+{deleteingMember && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 animate-fade-in-up">
+      <h2 className="text-xl font-semibold mb-4 text-gray-800">
+        Voulez-vous vraiement supprimer ce membre? 
+      </h2>
+      <span className="text-black font-bold text-xl">{deleteingMember.name}</span>
+
+      <div className="flex justify-end space-x-3">
+        <button
+          onClick={() => setdeletingMember(null)}
+          className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg text-sm cursor-pointer"
+        >
+          Annuler
+        </button>
+        <button
+          onClick={handleDeleteMember}
+          className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm cursor-pointer shadow-2xl font-bold"
+        >
+         Supprimer
+        </button>
+      </div>
+    </div>
+  </div>
+)}
     </main>
-  )
-}
+  )}

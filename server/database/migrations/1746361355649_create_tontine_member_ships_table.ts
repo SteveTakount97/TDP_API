@@ -8,7 +8,7 @@ export default class extends BaseSchema {
       table.increments('id')
       table.integer('user_id').unsigned().references('id').inTable('users').onDelete('CASCADE')
       table.integer('tontine_id').unsigned().references('id').inTable('tontines').onDelete('CASCADE')
-      table.enum('role', ['member', 'admin', 'treasure']).notNullable()
+      table.enum('role', ['member', 'admin', 'treasurer']).notNullable()
       table.boolean('is_active').defaultTo(true)
       table.unique(['user_id', 'tontine_id'])
       table.timestamp('joined_at', { useTz: true }).defaultTo(this.now())

@@ -47,4 +47,5 @@ export default class TontineMemberShip extends BaseModel {
 
   static schema: any
   roleId: any
+  public static table = 'tontine_member_ships'
 }

@@ -67,8 +67,8 @@ router.group(() => {
   router.post('/tontine-memberships/:id', membershipController.store)
   router.get('/tontine-memberships/:id', membershipController.index)
   router.get('/membership/:id/users/seach', membershipController.searchUsers)
-  router.put('/mermbership/:id', membershipController.update)
-  router.delete('/mermbership/:id', membershipController.destroy)
+  router.put('/tontine-memberships/:id', membershipController.update)
+  router.delete('/tontine-memberships/:id', membershipController.destroy).middleware([new AdminMiddleware().handle])
 
   //paiement
   router.get('/Payment/:id', paiementController.show)

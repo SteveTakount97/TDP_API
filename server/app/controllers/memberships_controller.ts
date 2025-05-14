@@ -3,6 +3,7 @@ import TontineMemberShip from '#models/tontine_member_ship'
 import { schema } from '@adonisjs/validator'
 import User from '#models/user'
 
+
 export default class TontineMembershipsController {
   /**
    * @swagger
@@ -59,6 +60,7 @@ export default class TontineMembershipsController {
       const formatted = members.map(m => ({
         name: m.user.full_name,
         role: m.role,
+        id: m.id,
       }))
 
       return response.ok(formatted)
@@ -241,13 +243,16 @@ export default class TontineMembershipsController {
     })
   
     try {
-      const payload = await request.validate({ schema: roleSchema })
+      const {role} = await request.validate({ schema: roleSchema })
   
       // Vérification de l'existence du membre
       const membership = await TontineMemberShip.findOrFail(params.id)
-  
-      // Mise à jour du rôle
-      membership.role = payload.role
+
+      if (!membership){
+        return response.notFound({messages: 'Membre non trouvé'})
+      }
+
+      membership.role = role
       await membership.save()
   
       // Retour d'une réponse propre
@@ -341,17 +346,19 @@ export default class TontineMembershipsController {
    * Retirer un utilisateur d’une tontine
    */
  public async destroy({ params, response }: HttpContext) {
-  try {
-    const membership = await TontineMemberShip
-      .query()
-      .where('user_id', params.userId)
-      .where('tontine_id', params.tontineId)
-      .firstOrFail()
+  
+    try {
+      const membership = await TontineMemberShip.findOrFail(params.id)
 
-    await membership.delete()
-    return response.ok({ message: 'Utilisateur retiré de la tontine' })
-  } catch (error) {
-    return response.internalServerError({ message: error.message })
+      await membership.delete()
+
+      return response.ok({
+        message: 'Membre supprimé de la tontine avec succès',
+      })
+    } catch (error) {
+      return response.notFound({
+        message: `Aucun membre trouvé avec l'ID : ${params.id}`,
+      })
+    }
   }
-}
 }
