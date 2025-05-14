@@ -80,7 +80,7 @@ export default function Drawer({ activeDrawer, closeDrawer }: DrawerProps) {
           ))}
         </ul>
           <motion.div
-        className="w-1/2 flex justify-center rounded-full overflow-hidden mt-50"
+        className="w-full flex justify-center rounded-full overflow-hidden mt-50"
         animate={{ rotate: 40 }}
         transition={{ repeat: Infinity, duration: 10, ease: 'linear' }}
         
@@ -88,8 +88,8 @@ export default function Drawer({ activeDrawer, closeDrawer }: DrawerProps) {
         <Image
           src="/Tdp.png"
           alt="Logo animé"
-          width={150}
-          height={150}
+          width={100}
+          height={100}
         />
         </motion.div>
       <div className="absolute bottom-0 flex-col h-20 border-t px-4 py-3 bg-purple flex justify-between items-center hover:text-gray-900 transition-colors">

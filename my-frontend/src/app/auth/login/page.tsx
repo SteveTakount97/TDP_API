@@ -14,16 +14,20 @@ export default function LoginPage() {
     email: '',
     password: '',
   });
-  const [error, setError] = useState('');
+  const [status, setStatus] = useState<'Loading' | 'Success' | 'Error'>('Loading');
+  const [errorMessage, setErrorMessage] = useState('');
   const router = useRouter()
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setStatus('Loading');
+    setErrorMessage('');
+    
 
     if (!formData.email || !formData.password) {
-      setError('Tous les champs sont obligatoires.');
+      setErrorMessage('Champs obligatoire manquant!');
       return;
     }
     console.log('Tentative de connexion :', formData);
@@ -35,7 +39,7 @@ export default function LoginPage() {
     try {
       const response = await api.post('http://localhost:3333/api/login', data);
       console.log('Réponse de la requête:', response);
-
+      
       // Vérifier que la réponse contient bien un token
       if (response && response.data && response.data.token.token) {
         // Sauvegarder le token dans le localStorage
@@ -44,9 +48,10 @@ export default function LoginPage() {
         localStorage.setItem('token', token);
         localStorage.setItem('user', JSON.stringify(response.data.user)); 
         console.log('infos user', response.data.user);
-  
+        
+        setStatus('Success')
         alert('Connexion réussie');
-
+        
         // Configurer axios avec le token
          axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
 
@@ -54,14 +59,15 @@ export default function LoginPage() {
         router.push('/acceuil');
       } else {
         // Si la réponse ne contient pas de token
-        setError('Erreur : Pas de token reçu');
+        setErrorMessage('Erreur : Pas de token reçu');
         console.error('Erreur : Pas de token reçu', response);
       }
   
-    } catch (err) {
+    } catch (error: any) {
+      setStatus('Error')
       // Gérer les erreurs d'API ou autres erreurs
-      setError('Erreur de connexion : ');
-      console.error('Erreur de connexion:', err);
+      setErrorMessage('Invalide email or password ');
+      console.error('Invalide email or password:', error.response.message);
     }
   
 
@@ -120,6 +126,10 @@ export default function LoginPage() {
             S’inscrire
           </a>
         </p>
+         {/* Affichage des errors */}
+      {status === 'Loading' && <p className='text-emerald-400 font-bold'>Entrez vos identifiants</p>}
+      {status === 'Success' && <p className='text-green-500'>Connexion reussi!</p>}
+      {status === 'Error' && <p className='text-red-600'>Erreur : {errorMessage}</p>}
       </form>
     </main>
   );

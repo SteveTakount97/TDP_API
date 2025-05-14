@@ -106,7 +106,7 @@ export default function DashboardPage() {
   
   return (
  
-    <main className="min-h-screen bg-gradient-to-b from-blue-500 to-purple-600 p-6">
+    <main className="min-h-screen bg-gradient-to-b bg-black p-6">
       <header className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-white">Bienvenue, {user?.fullName || 'Utilisateur'} 👋</h1>
         <button
@@ -118,7 +118,7 @@ export default function DashboardPage() {
       </header>
       <section className="px-4 py-6">
    <div className="grid grid-cols-1 md:grid-cols gap-6">
-   <div className="bg-white shadow-md rounded-xl p-6 text-black flex flex-col md:flex-row justify-between items-start gap-6">
+   <div className="bg-white shadow-md rounded-xl p-6 text-black flex flex-col md:flex-row items-start gap-6">
   {/* Colonne gauche : Infos utilisateur */}
   <div className="flex-1 flex flex-col items-center md:items-start">
     <h2 className="text-2xl font-semibold mb-6 self-center md:self-start">Vos informations</h2>
@@ -129,7 +129,7 @@ export default function DashboardPage() {
         <img
           src={`http://localhost:3333${user.profileImageUrl}`}
           alt="Photo de profil"
-          className="w-full h-full "
+          className="w-full h-full object-cover "
         />
       ) : (
         <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-500 text-sm">
@@ -171,15 +171,15 @@ export default function DashboardPage() {
 
   {/* Colonne droite : Logo animé */}
   <motion.div
-    className="w-[250px] flex justify-center rounded-full overflow-hidden self-center md:self-start"
+    className="w-[150px] flex justify-center rounded-full overflow-hidden self-center md:self-start"
     animate={{ rotate: 30 }}
     transition={{ repeat: Infinity, duration: 10, ease: 'linear' }}
   >
     <Image
       src="/Tdp.png"
       alt="Logo animé"
-      width={250}
-      height={250}
+      width={100}
+      height={100}
       className="w-50 h-auto"
     />
   </motion.div>

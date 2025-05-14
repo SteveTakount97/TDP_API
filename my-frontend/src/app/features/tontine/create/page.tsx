@@ -73,13 +73,14 @@ export default function CreateTontineForm() {
 
   return (
     <>
+    <main className='bg-black text-white min-h-screen'>
     <div className='flex justify-center'>
-     <Link href="/acceuil" className="flex items-center text-black hover:underline absolute top-4 left-4 ">
-       <ArrowLeft className="w-5 h-5 mr-1" />
+     <Link href="/acceuil" className="flex items-center hover:underline absolute top-4 left-4 ">
+       <ArrowLeft className="w-5 h-5 mr-1 text-white" />
        Retour
        </Link>
        <motion.div
-        className="w-1/2 flex justify-center rounded-full overflow-hidden"
+        className="w-[120px] flex justify-center rounded-full overflow-hidden"
         animate={{ rotate: 30 }}
         transition={{ repeat: Infinity, duration: 10, ease: 'linear' }}
         
@@ -87,15 +88,15 @@ export default function CreateTontineForm() {
         <Image
           src="/Tdp.png"
           alt="Logo animé"
-          width={250}
-          height={150}
+          width={100}
+          height={100}
           className="w-50 h-auto items-center"
         />
         </motion.div>
      </div>   
     <form
       onSubmit={handleSubmit}
-      className="space-y-6 bg-white text-black shadow-xl p-8 rounded-2xl max-w-xl mx-auto mt-8 cursor-pointer"
+      className="space-y-6 bg-white text-black shadow-xl p-8 rounded-2xl max-w-xl mx-auto mt-8 cursor-pointer mb-7"
     >
       <h2 className="text-2xl font-bold mb-4">Créer une nouvelle tontine</h2>
 
@@ -198,6 +199,7 @@ export default function CreateTontineForm() {
         {loading ? 'Création en cours...' : 'Créer la tontine'}
       </button>
     </form>
+    </main>
    </> 
   )
 }
