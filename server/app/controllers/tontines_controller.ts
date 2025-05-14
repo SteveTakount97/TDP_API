@@ -274,14 +274,21 @@ public async show({ params, auth, response }: HttpContext) {
    *         description: Non autorisé
    */
   public async destroy({ params, response }: HttpContext) {
-    try {
-      const tontine = await Tontine.findOrFail(params.id)
-      await tontine.delete()
-      return response.ok({ message: 'Tontine supprimée' })
-    } catch (error) {
-      return response.notFound({ message: 'Tontine non trouvée' })
+  try {
+    const tontine = await Tontine.findOrFail(params.id)
+
+    await tontine.delete()
+
+  
+    return response.ok({ message: 'Tontine supprimée avec succès' })
+  } catch (error) {
+    if (error.name === 'ModelNotFoundException') {
+    
+      return response.notFound({ message: 'Tontine introuvable' })
     }
+
+    return response.internalServerError({
+      message: 'Une erreur est survenue lors de la suppression de la tontine',
+    })
   }
-}
-
-
+}}

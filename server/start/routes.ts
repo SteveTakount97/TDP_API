@@ -60,7 +60,7 @@ router.group(() => {
   router.get('/tontine', tontineController.index)
   router.get('/tontine/:id', tontineController.show)
   router.put('/tontine/:id', tontineController.update).middleware([new AdminMiddleware().handle])
-  router.delete('/tontine/:id', tontineController.destroy)
+  router.delete('/tontine/:id', tontineController.destroy).middleware([new AdminMiddleware().handle])
   
 
   //membreship
