@@ -23,9 +23,10 @@ export default function CreateTontineForm() {
     type: '',
     start_date: '',
   })
-
-  const [errors, setErrors] = useState<ErrorBag>({})
+  const [status, setStatus] = useState<'Loading' | 'Success' | 'Error'>('Loading');
+  const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false)
+  const [errors, setErrors] = useState<ErrorBag>({})
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -42,8 +43,10 @@ export default function CreateTontineForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setLoading(true)
-    setErrors({})
+     setStatus('Loading');
+     setErrorMessage('');
+      setLoading(true)
+     setErrors({})
 
   const dataForm = {
       name: formData.name,
@@ -57,17 +60,21 @@ export default function CreateTontineForm() {
     try {
       const res = await api.post('http://localhost:3333/api/tontines', dataForm)
        console.log('donnée envoyer', res);
+        
       if (res) {
-        router.push('features/tontine') 
+        setStatus('Success')
+        router.push('/features/tontine') 
       } 
       else {
-        setErrors(res|| {})
+        setErrorMessage("Une érreur s'est produit lors de la soumission du formulaire");
+        console.error('Erreur :', res);
+          setErrors(res|| {})
       }
     } catch (err:any) {
       console.error('Erreur réseau', err.response.data)
-       setErrors(err.response.data.errors || {});
+      setErrorMessage('Un Champ Manquant');
     } finally {
-      setLoading(false)
+      setStatus('Loading')
     }
   }
 
@@ -199,6 +206,9 @@ export default function CreateTontineForm() {
         {loading ? 'Création en cours...' : 'Créer la tontine'}
       </button>
     </form>
+       {/* Affichage des errors */}
+      {status === 'Success' && <p className='text-green-500'>Tontine Créee avec succès!</p>}
+      {status === 'Error' && <p className='text-red-600'>Erreur : {errorMessage}</p>}
     </main>
    </> 
   )

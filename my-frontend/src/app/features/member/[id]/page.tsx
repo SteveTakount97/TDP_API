@@ -159,17 +159,18 @@ useEffect(() => {
     }
   }
   return (
-    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 min-h-screen">
+    <div className="bg-black">
+    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 min-h-screen bg-black text-white">
       <header className="mb-8 text-center shadow-md w-full pb-2 ">
          <Link
         href="/features/tontine"
-        className="flex items-center text-black hover:underline shadow-2xl w-20 rounded-2xl"
+        className="flex items-center hover:underline shadow-2xl w-20 rounded-2xl"
          >
       <ArrowLeft className="w-5 h-5 mr-1" />
       Retour
           </Link>
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Gestion des membres</h1>
-        <p className="text-gray-600 text-sm mb-2">
+        <h1 className="text-3xl font-bold mb-2">Gestion des membres</h1>
+        <p className="text-sm mb-2">
           Retrouvez ici la liste des membres liés à cette tontine, avec leur rôle respectif.
         </p>
         <button
@@ -259,7 +260,7 @@ useEffect(() => {
           </TabsList>
 
           <TabsContent value="members">
-            <Card className="rounded-xl border shadow-md">
+            <Card className="rounded-xl border shadow-md bg-white">
               <CardContent className="p-6">
                 <h3 className="text-xl font-semibold mb-5 text-gray-800">Liste des membres</h3>
 
@@ -270,7 +271,7 @@ useEffect(() => {
                     {members.map((member) => (
                       <li
                         key={member.id}
-                        className="flex justify-between items-center px-4 py-2 rounded-lg border border-gray-200 hover:bg-gray-50 transition"
+                        className="flex justify-between items-center px-4 py-2 rounded-lg border border-gray-400 hover:bg-gray-50 transition"
                       >
                       <div className="flex flex-col justify-between sm:flex-row sm:items-center gap-2 sm:gap-4 w-full">
                         <span className="text-base font-medium text-gray-700 hover:text-2xl cursor-pointer">{member.name}</span>
@@ -361,4 +362,5 @@ useEffect(() => {
   </div>
 )}
     </main>
+    </div>
   )}

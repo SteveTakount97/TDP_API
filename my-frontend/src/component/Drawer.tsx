@@ -17,7 +17,7 @@ export default function Drawer({ activeDrawer, closeDrawer }: DrawerProps) {
   const menuItems =
     activeDrawer === 'tontines'
       ? [
-          { icon: <PlusCircle className="w-4 h-4 text-amber-200" />, label: 'Créer une tontine', path: 'features/tontine/create' },
+          { icon: <PlusCircle className="w-4 h-4 text-amber-200" />, label: 'Créer une tontine', path: 'features/createTontine' },
           { icon: <Users className="w-4 h-4 text-blue-300" />, label: 'Mes groupes', path: 'features/tontine' },
           { icon: <History className="w-4 h-4 text-gray-700" />, label: 'Historique' },
           {icon: <Pencil className="w-4 h-4 text-blue-600" />, label: "Modifier une Tontine", path: 'features/tontine'},

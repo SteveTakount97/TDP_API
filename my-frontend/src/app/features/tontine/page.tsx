@@ -131,16 +131,16 @@ export default function TontinePage() {
   setNewDescription(tontine.description)
    }
   return (
-    <div className="min-h-screen text-white">
+    <div className="min-h-screen text-white bg-black">
       {/* Header */}
-      <header className="bg-white shadow-md">
-        <Link href="/acceuil" className="flex items-center text-black hover:underline absolute top-4 left-4 ">
+      <header className="bg-black text-white shadow-md border-b">
+        <Link href="/acceuil" className="flex items-center text-white hover:underline absolute top-4 left-4 ">
        <ArrowLeft className="w-5 h-5 mr-1" />
        Retour 
        </Link>
         <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-          <h1 className="text-3xl font-bold text-gray-800">Mes Tontines</h1>
-          <Link href="/features/tontine/create" className="flex items-center gap-2 text-black bg-primary hover:bg-primary/90 px-4 py-2 rounded-lg text-sm shadow-sm transition">
+          <h1 className="text-3xl font-bold text-white">Gestion Tontines</h1>
+          <Link href="/features/tontine/create" className="flex items-center gap-2 bg-primary border px-4 py-2 rounded-lg text-sm shadow-sm transition">
             <PlusCircle className="w-4 h-4 bg-green-600 text-purple-800" />
             Créer Une Nouvelle tontine
           </Link>
@@ -148,8 +148,8 @@ export default function TontinePage() {
       </header>
      
       {/* Contenu principal */}
-      <main className="p-6 max-w-6xl mx-auto space-y-6">
-         <Tabs defaultValue="tontines" className="w-full text-black">
+      <main className="p-6 max-w-6xl mx-auto space-y-6 text-white">
+        <Tabs defaultValue="tontines" className="w-full text-white">
         <TabsList className="mb-4 gap-4">
           <TabsTrigger value="Tontines" className="flex items-center gap-1 hover:text-red-500 cursor-pointer shadow-2xl">
             <RotateCw className="h-4 w-4" />
@@ -159,7 +159,7 @@ export default function TontinePage() {
       </Tabs>  
         {tontines.length > 0 ? (
           tontines.map((tontine:any) => (
-            <Card key={tontine.id} className="shadow-sm border border-gray-200 rounded-2xl hover:shadow-md transition duration-200">
+            <Card key={tontine.id} className="shadow-sm border border-gray-200 bg-white rounded-2xl hover:shadow-md transition duration-200">
               <CardContent className="p-6 space-y-4 cursor-pointer">
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
                   <div>
@@ -205,7 +205,7 @@ export default function TontinePage() {
         ) : (
           <p className="text-gray-500 text-center mt-12">Aucune tontine trouvée.</p>
         )}
-        <Tabs defaultValue="members" className="w-full text-black">
+        <Tabs defaultValue="members" className="w-full text-white">
         <TabsList className="mb-4 gap-4">
           <TabsTrigger value="cycles" className="flex items-center gap-1 hover:text-red-500 cursor-pointer shadow-2xl">
             <RotateCw className="h-4 w-4" />
@@ -214,13 +214,13 @@ export default function TontinePage() {
         </TabsList>
         <TabsContent value="cycles">
           <Card className="rounded-lg border shadow-sm">
-            <CardContent className="p-5">
-              <h3 className="text-lg font-semibold mb-4 text-gray-800 cursor-pointer">Historique des cycles</h3>
+            <CardContent className="p-5 bg-white">
+              <h3 className="text-lg font-semibold mb-4 cursor-pointer">Historique des cycles</h3>
               <ul className="space-y-3">
                 {cycles.map((cycle) => (
                   <li
                     key={cycle.id}
-                    className="border rounded-lg p-4 text-sm hover:bg-gray-50 transition"
+                    className="border border-black rounded-lg p-4 text-sm hover:bg-gray-50 transition"
                   >
                     <div className="flex justify-between items-center cursor-pointer">
                       <span className="text-black ">
@@ -271,7 +271,7 @@ export default function TontinePage() {
       <div className="flex justify-end space-x-3">
         <button
           onClick={() => setEditingTontine(null)}
-          className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg text-sm cursor-pointer"
+          className="px-4 py-2 bg-gray-400 hover:bg-gray-500 text-white font-bold rounded-lg text-sm cursor-pointer"
         >
           Annuler
         </button>
@@ -298,7 +298,7 @@ export default function TontinePage() {
       <div className="flex justify-end space-x-3">
         <button
           onClick={() => setdeletingTontine(null)}
-          className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg text-sm cursor-pointer"
+          className="px-4 py-2 bg-gray-400 hover:bg-gray-500 rounded-lg font-bold text-sm cursor-pointer"
         >
           Annuler
         </button>
