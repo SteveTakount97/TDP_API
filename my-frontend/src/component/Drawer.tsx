@@ -22,14 +22,14 @@ export default function Drawer({ activeDrawer, closeDrawer }: DrawerProps) {
           { icon: <History className="w-4 h-4 text-gray-700" />, label: 'Historique' },
           {icon: <Pencil className="w-4 h-4 text-blue-600" />, label: "Modifier une Tontine", path: 'features/tontine'},
           {icon: <Trash2 className="w-4 h-4 text-red-600" />, label: 'Supprimer une Tontine'},
-          { icon: <Eye className="w-4 h-4 text-gray-700" />, label: "Voir le Detail d'une Tontine"},
+          { icon: <Eye className="w-4 h-4 text-gray-700" />, label: "Detail d'une Tontine"},
         ]
       : activeDrawer === 'payments'
       ? [
-          { icon: <CreditCard className="w-4 h-4 text-gray-700" />, label: 'Mes paiements' },
+          { icon: <CreditCard className="w-4 h-4 text-gray-700" />, label: 'Mes paiements', path: 'features/cycleTontine'  },
           { icon: <Receipt className="w-4 h-4 text-amber-200" />, label: 'Reçus' },
           { icon: <Send className="w-4 h-4 text-green-500" />, label: "Envoyer de L'argent" },
-          { icon: <Eye className="w-4 h-4 text-gray-700" />, label: "Voir le Detail d'une Transaction"},
+          { icon: <Eye className="w-4 h-4 text-gray-700" />, label:"Detail d'une Transaction"},
           { icon: <Bell className="w-4 h-4 text-red-500" />, label: 'Alertes' },
         ]
          : activeDrawer === 'users'

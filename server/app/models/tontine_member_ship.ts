@@ -6,6 +6,7 @@ import Tontine from './tontine.js'
 
 
 export default class TontineMemberShip extends BaseModel {
+  
   @column({ isPrimary: true })
   declare id: number
   
@@ -47,5 +48,6 @@ export default class TontineMemberShip extends BaseModel {
 
   static schema: any
   roleId: any
+  
   public static table = 'tontine_member_ships'
 }

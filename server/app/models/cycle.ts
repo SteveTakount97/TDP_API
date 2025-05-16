@@ -9,7 +9,7 @@ export default class Cycle extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
   
-  @column()
+  @column({ columnName: 'tontine_id' })
   declare tontineId: number
 
   @column()

@@ -185,12 +185,12 @@ useEffect(() => {
       {/* MODALE */}
       {isOpen && (
         <div className="fixed inset-0 bg-purple-600 bg-opacity-40 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg w-full max-w-md shadow-lg relative">
+          <div className="bg-white p-6 rounded-lg w-full max-w-md shadow-lg relative text-black">
             <h2 className="text-xl font-semibold mb-4">Ajouter un membre</h2>
           
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block mb-1 font-medium">Nom utilisateur</label>
+                <label className="block mb-1 font-medium text-gray-400">Nom utilisateur</label>
                 <input
                   type="text"
                   placeholder="Rechercher par nom"

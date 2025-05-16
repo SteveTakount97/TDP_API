@@ -25,7 +25,7 @@ export default class CyclesController {
    */
   public async index({ response }: HttpContext) {
     try {
-      const cycles = await Cycle.all()
+      const cycles = await Cycle.query().preload('tontine')
       return response.ok(cycles)
     } catch (error) {
       return response.internalServerError({ message: error.message })
@@ -111,7 +111,10 @@ export default class CyclesController {
    */
   public async show({ params, response }: HttpContext) {
     try {
-      const cycle = await Cycle.findOrFail(params.id)
+     const cycle = await Cycle.query()
+      .where('id', params.id)
+      .preload('tontine')
+      .firstOrFail()
       return response.ok(cycle)
     } catch (error) {
       return response.notFound({ message: 'Cycle non trouvé' })

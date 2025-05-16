@@ -1,10 +1,10 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
+import { Tabs, TabsList, TabsTrigger} from '@/components/ui/tabs'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { CalendarCheck, RotateCw, PlusCircle, Edit, Eye, Trash, Users } from 'lucide-react'
+import { CalendarCheck, RotateCw, PlusCircle, Edit, Trash, Users } from 'lucide-react'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import { useRouter } from 'next/navigation'
@@ -27,16 +27,9 @@ interface Member {
   role: string
 }
 
-interface Cycle {
-  id: string
-  status: string
-  startDate: string
-  endDate: string
-}
 
 export default function TontinePage() {
   const [tontines, setTontine] =  useState<Tontine[]>([]);
-  const [cycles, setCycles] = useState<Cycle[]>([])
   
  //state pour modifier une tontine
   const [editingTontine, setEditingTontine] = useState<Tontine | null>(null)
@@ -58,19 +51,9 @@ export default function TontinePage() {
       console.error('Erreur lors du fetch de la tontine:', error.response?.data || error.message)
     }
   }
-   const fetchCycle = async () => {
-    try {
-      const response = await api.get("/Cycle-tontine") 
-      const cycleData = response.data
-      setCycles(cycleData)
-      console.log('data', cycleData)
-    } catch (error: any) {
-       const errormessage = error.response?.data?.message || error.message || 'Erreur inconnue'
-     console.error('Erreur lors du fetch des membres de la tontine:', errormessage)
-    }
-  }
+
   fetchtontine()
-  fetchCycle()
+
   }, [])
  
  const router = useRouter();
@@ -205,37 +188,6 @@ export default function TontinePage() {
         ) : (
           <p className="text-gray-500 text-center mt-12">Aucune tontine trouvée.</p>
         )}
-        <Tabs defaultValue="members" className="w-full text-white">
-        <TabsList className="mb-4 gap-4">
-          <TabsTrigger value="cycles" className="flex items-center gap-1 hover:text-red-500 cursor-pointer shadow-2xl">
-            <RotateCw className="h-4 w-4" />
-            Cycles Tontines
-          </TabsTrigger>
-        </TabsList>
-        <TabsContent value="cycles">
-          <Card className="rounded-lg border shadow-sm">
-            <CardContent className="p-5 bg-white">
-              <h3 className="text-lg font-semibold mb-4 cursor-pointer">Historique des cycles</h3>
-              <ul className="space-y-3">
-                {cycles.map((cycle) => (
-                  <li
-                    key={cycle.id}
-                    className="border border-black rounded-lg p-4 text-sm hover:bg-gray-50 transition"
-                  >
-                    <div className="flex justify-between items-center cursor-pointer">
-                      <span className="text-black ">
-                        Période : {new Date(cycle.startDate).toLocaleDateString()} -{' '}
-                        {new Date(cycle.endDate).toLocaleDateString()}
-                      </span>
-                      <Badge className="text-xs capitalize text-green-600 cursor-pointer">{cycle.status}</Badge>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
 
    {/**modale edit le nom et la description d'une tontine */}
     {editingTontine && (

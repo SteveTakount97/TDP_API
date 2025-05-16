@@ -1,9 +1,8 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column, belongsTo } from '@adonisjs/lucid/orm'
 import * as relations from '@adonisjs/lucid/types/relations'
-import User from './user.js'
 import Cycle from './cycle.js'
-import Tontine from './tontine.js'
+import User from './user.js'
 
 export default class Paiement extends BaseModel {
   @column({ isPrimary: true })
@@ -13,19 +12,22 @@ export default class Paiement extends BaseModel {
   declare userId: number
 
   @column()
-  declare tontineId: number
-
-  @column()
   declare cycleId: number
 
   @column()
-  declare amount: number
+  declare amount_per_cycle: number
+
+   @column()
+  public phoneNumber?: string
+
+  @column()
+  public note?: string
 
   @column.dateTime()
   declare paidAt: DateTime
 
   @column()
-  declare paymentMethod: string
+  declare payment_method: string
 
   @column()
   declare status: 'valide' | 'en_attente' | 'refuse'
@@ -33,9 +35,6 @@ export default class Paiement extends BaseModel {
   //relations tables
   @belongsTo(() => User)
   public user!: relations.BelongsTo<typeof User>
-
-  @belongsTo(() => Tontine)
-  public tontine!: relations.BelongsTo<typeof Tontine>
 
   @belongsTo(() => Cycle)
   public cycle!: relations.BelongsTo<typeof Cycle>

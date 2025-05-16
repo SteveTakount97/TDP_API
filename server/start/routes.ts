@@ -71,9 +71,11 @@ router.group(() => {
   router.delete('/tontine-memberships/:memberId/tontine/:tontineId', membershipController.destroy).middleware([new AdminMiddleware().handle])
 
   //paiement
-  router.get('/Payment/:id', paiementController.show)
-  router.post('/Payment/:id', paiementController.store)
-  router.get('/Payment/user', paiementController.index)
+  router.post('/payments/:cycleId', paiementController.store)
+  router.get('/payments/cycle/:cycleId', paiementController.show)
+  router.get('/payments', paiementController.index)
+  router.put('payments/:id', paiementController.update)
+  router.delete('payments/:id', paiementController.destroy)
   
   //gestion des cycles
   router.post('/Cycle-tontine/', cycleController.store)
