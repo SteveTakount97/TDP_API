@@ -8,6 +8,7 @@ import Image from 'next/image';
 import axios from 'axios';
 import Features from '@/component/fonctionnalite';
 import Drawer from '@/component/Drawer';
+import Link from 'next/link';
 
 
 type User = {
@@ -107,14 +108,21 @@ export default function DashboardPage() {
   return (
  
     <main className="min-h-screen bg-gradient-to-b bg-black p-6">
-      <header className="flex justify-between items-center mb-6">
+      <header className="flex items-center mb-6">
         <h1 className="text-2xl font-bold text-white">Bienvenue, {user?.fullName || 'Utilisateur'} 👋</h1>
+        <div className="flex justify-end w-full gap-2">
+         <Link href='/'
+          className="bg-green-500 text-white px-4 py-2 rounded hover:bg-red-600 transition "
+        >
+          Retour Page d'accueil
+        </Link>
         <button
           onClick={handleLogout}
           className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition "
         >
           Se déconnecter
         </button>
+        </div>
       </header>
       <section className="px-4 py-6">
    <div className="grid grid-cols-1 md:grid-cols gap-6">

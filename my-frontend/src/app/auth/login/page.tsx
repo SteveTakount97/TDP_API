@@ -56,7 +56,7 @@ export default function LoginPage() {
          axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
 
         // Redirection vers la page d'accueil
-        router.push('/acceuil');
+        router.push('/');
       } else {
         // Si la réponse ne contient pas de token
         setErrorMessage('Erreur : Pas de token reçu');

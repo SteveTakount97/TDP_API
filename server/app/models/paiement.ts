@@ -27,6 +27,9 @@ export default class Paiement extends BaseModel {
   declare paidAt: DateTime
 
   @column()
+  declare validate_by: number
+
+  @column()
   declare payment_method: string
 
   @column()
@@ -38,6 +41,9 @@ export default class Paiement extends BaseModel {
 
   @belongsTo(() => Cycle)
   public cycle!: relations.BelongsTo<typeof Cycle>
+
+  @belongsTo(() => User, { foreignKey: 'validatedBy' })
+  public validatedByUser!: relations.BelongsTo<typeof User>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

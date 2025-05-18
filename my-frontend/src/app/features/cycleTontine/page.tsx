@@ -123,9 +123,7 @@ export default function CyclesPage() {
               </ul>
             </CardContent>
           </Card>
-            ) : (
-          <p className="text-white text-2xl font-bold text-center mt-12">Aucun cycle trouvé...</p>
-        )
+       
         </TabsContent>
       </Tabs>
     </main>

@@ -73,6 +73,7 @@ router.group(() => {
   //paiement
   router.post('/payments/:cycleId', paiementController.store)
   router.get('/payments/cycle/:cycleId', paiementController.show)
+  router.patch('/payment/:id/valider', paiementController.valider)
   router.get('/payments', paiementController.index)
   router.put('payments/:id', paiementController.update)
   router.delete('payments/:id', paiementController.destroy)

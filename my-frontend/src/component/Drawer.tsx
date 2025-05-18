@@ -28,8 +28,8 @@ export default function Drawer({ activeDrawer, closeDrawer }: DrawerProps) {
       ? [
           { icon: <CreditCard className="w-4 h-4 text-gray-700" />, label: 'Mes paiements', path: 'features/cycleTontine'  },
           { icon: <Receipt className="w-4 h-4 text-amber-200" />, label: 'Reçus' },
-          { icon: <Send className="w-4 h-4 text-green-500" />, label: "Envoyer de L'argent" },
-          { icon: <Eye className="w-4 h-4 text-gray-700" />, label:"Detail d'une Transaction"},
+          { icon: <History className="w-4 h-4 text-green-500" />, label: "Historique", path: 'features/payment'  },
+          { icon: <Eye className="w-4 h-4 text-gray-700" />, label:"Detail Transaction"},
           { icon: <Bell className="w-4 h-4 text-red-500" />, label: 'Alertes' },
         ]
          : activeDrawer === 'users'

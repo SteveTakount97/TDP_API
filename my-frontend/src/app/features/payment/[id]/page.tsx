@@ -9,10 +9,13 @@ import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import api from '@/lib/axios'
 import Link from 'next/link'
-import { ArrowLeft } from 'lucide-react'
+import Features from '@/component/fonctionnalite'
+
 
 interface Payment {
-  user: { fullName: string }
+  user: { fullName: string 
+    phone_number: string
+  }
   cycle: any
   id: number
   cycle_id: number
@@ -23,7 +26,7 @@ interface Payment {
   status: 'valide' | 'en_attente' | 'refuse'
     tontine: { id: number
     name: string
-     amoutPerCycle: number }
+    amoutPerCycle: number }
 }
 
 interface CreatePaymentDto {
@@ -32,15 +35,17 @@ interface CreatePaymentDto {
   paidAt: string
   note?: string
   phone_number?: string
-  status?: 'valide' | 'en_attente' | 'refuse'
+  status?: 'en_attente' 
 }
 
 export default function PaymentsPage() {
   const params = useParams()
   const cycleId = params.id
   const [payments, setPayments] = useState<Payment[]>([])
-  const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  
+  const [loading, setLoading] = useState(true)
+
   const [creating, setCreating] = useState(false)
 
   const [form, setForm] = useState<CreatePaymentDto>({
@@ -64,10 +69,12 @@ export default function PaymentsPage() {
       setLoading(false)
     }
   }
+  
 
   useEffect(() => {
     if (cycleId) fetchPayments()
   }, [cycleId])
+ 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -77,9 +84,20 @@ export default function PaymentsPage() {
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault()
     setCreating(true)
+     
+    if (form.amount_per_cycle < (payments[0]?.cycle?.tontine?.amountPerCycle || 0)) {
+    alert("Le montant est inférieur au montant attendu pour ce cycle.")
+    setCreating(false)
+   return
+     }
+     if (form.phone_number !== (payments[0]?.user.phone_number)){
+      alert("Numéro de téléphone saisi ne correspond pas à celui préenrégistré")
+      setCreating(false)
+      return
+     }
+
     try {
       await api.post(`/payments/${cycleId}`, form)
-      await fetchPayments()
       setForm({
         amount_per_cycle: 0,
         paidAt: new Date().toISOString().split('T')[0],
@@ -106,13 +124,9 @@ export default function PaymentsPage() {
 <>
    {/* Header */}
       <header className="bg-black text-white shadow-md border-b">
-        <Link href="/acceuil" className="flex items-center text-white hover:underline absolute top-4 left-4 ">
-       <ArrowLeft className="w-5 h-5 mr-1" />
-       Retour 
-       </Link>
         <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-          <h1 className="text-3xl font-bold text-white">Gestion des Paiement</h1>
-          <Link href="/features/tontine/create" className="flex items-center gap-2 bg-primary border px-4 py-2 rounded-lg text-sm shadow-sm transition">
+          <h1 className="text-3xl font-bold text-white">Effectuer un Paiement</h1>
+          <Link href="/features/payment/${id}" className="flex items-center gap-2 bg-primary border px-4 py-2 rounded-lg text-sm shadow-sm transition">
             <PlusCircle className="w-4 h-4 bg-green-600 text-purple-800" />
             Effectuer un Paiement
           </Link>
@@ -123,7 +137,8 @@ export default function PaymentsPage() {
 
   {/* Formulaire d’ajout */}
   <section className="bg-white p-8 rounded-2xl shadow-lg ring-1 ring-slate-200 max-w-4xl mx-auto">
-    <h2 className="text-2xl font-semibold text-slate-700 mb-6">Ajouter un paiement</h2>
+    <h2 className="text-2xl font-semibold text-slate-700 mb-2">Ajouter un paiement</h2>
+    <p>Montant à verser :{payments[0]?.cycle?.tontine?.amountPerCycle}</p>
     <form
       onSubmit={handleCreate}
       className="grid grid-cols-1 md:grid-cols-2 gap-6"
@@ -141,7 +156,7 @@ export default function PaymentsPage() {
           className="rounded-xl border-slate-300 focus:ring-2 focus:ring-blue-500"
         />
       </div>
-
+      
       <div>
         <Label htmlFor="paidAt" className="mb-1 block text-sm font-medium text-slate-700">
           Date de paiement
@@ -191,15 +206,13 @@ export default function PaymentsPage() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="en_attente">En attente</SelectItem>
-            <SelectItem value="valide">Validé</SelectItem>
-            <SelectItem value="refuse">Refusé</SelectItem>
           </SelectContent>
         </Select>
       </div>
 
       <div className="md:col-span-2">
         <Label htmlFor="note" className="mb-1 block text-sm font-medium text-slate-700">
-          Note
+          Note *(facultatif)
         </Label>
         <Input
           name="note"
@@ -232,46 +245,8 @@ export default function PaymentsPage() {
       </div>
     </form>
   </section>
+  <Features />
 
-  {/* Liste des paiements */}
-  <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-    {loading && <p className="text-gray-500">Chargement des paiements...</p>}
-    {error && <p className="text-red-600 font-medium">{error}</p>}
-
-    {!loading &&
-      payments.map((payment) => (
-        <div
-          key={payment.id}
-          className="rounded-2xl border p-5 shadow-md bg-white ring-1 ring-slate-200 hover:shadow-lg transition-all"
-        >
-          <p className="text-sm text-gray-400 mb-1">
-            {payment.cycle?.tontine?.name ?? 'Tontine inconnue'}
-          </p>
-          <p className="text-xl font-bold text-slate-800 mb-1">
-            {payment.amountPerCycle} €
-          </p>
-          <p className="text-sm text-slate-600">Membre : {payment.user.fullName}</p>
-          <p className="text-sm text-slate-600">Date : {formatDate(payment.paidAt)}</p>
-          <p className="text-sm text-slate-600">Méthode : {payment.payment_method}</p>
-          <p className="text-sm text-slate-600">Cycle type : {payment.cycle.tontine.type}</p>
-          <p className="text-sm text-red-500 font-bold">Montont dû du Cycle : {payment.cycle?.tontine?.amountPerCycle?? "montant total"}</p>
-          <p className="text-sm">
-            Statut :{' '}
-            <span
-              className={`font-semibold ${
-                payment.status === 'valide'
-                  ? 'text-green-600'
-                  : payment.status === 'en_attente'
-                  ? 'text-yellow-600'
-                  : 'text-red-600'
-              }`}
-            >
-              {payment.status}
-            </span>
-          </p>
-        </div>
-      ))}
-  </section>
 </div>
 </>
   )

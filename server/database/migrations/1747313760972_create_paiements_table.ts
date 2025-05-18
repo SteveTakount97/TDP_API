@@ -23,6 +23,7 @@ export default class extends BaseSchema {
       table.string('note').nullable()
       table.string('payment_method').notNullable
       table.enum('status', ['valide', 'en_attente', 'refuse']).defaultTo('en_attente')
+      table.integer('validated_by').unsigned().nullable().references('id').inTable('users').onDelete('SET NULL')
       table.timestamp('paid_at', { useTz: true }).defaultTo(this.now())
       table.timestamps(true)
     })

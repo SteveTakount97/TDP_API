@@ -14,11 +14,12 @@ export default function HomePage() {
   const handleClick = () => {
     const token = localStorage.getItem("token");
     if (!!token) {
-      router.push("/auth/tontine");
+      router.push("/features/createTontine");
     } else {
       alert("Veuillez vous connecter pour créer une tontine.");
     }
   };
+
   return (
     <main className="min-h-screen flex flex-col">
       <Header />
@@ -43,7 +44,7 @@ export default function HomePage() {
           Une plateforme moderne pour gérer vos tontines de manière simple, sécurisée et collaborative.
         </p>
       
-          <button onClick={handleClick} className="bg-white text-blue-700 font-semibold px-5 py-2 rounded hover:bg-gray-100 shadow-lg ">
+          <button onClick={handleClick} className="bg-white text-blue-700 font-semibold px-5 py-2 rounded hover:bg-gray-100 shadow-lg cursor-pointer">
             Créer votre Tontine
           </button>
           

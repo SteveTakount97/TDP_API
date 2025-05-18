@@ -2,6 +2,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 import Paiement from '#models/paiement'
 import Cycle from '#models/cycle'
 import { rules, schema  } from '@adonisjs/validator'
+import TontineMemberShip from '#models/tontine_member_ship'
 
 
 export default class PaymentsController {
@@ -265,4 +266,75 @@ public async store({ request, response, auth, params }: HttpContext) {
       return response.internalServerError({ message: 'Erreur serveur' })
     }
   }
+  
+/**
+ * @swagger
+ * /paiements/{id}/valider:
+  post:
+    tags:
+      - Paiements
+    summary: Valider un paiement
+    description: Valide un paiement si l'utilisateur est admin ou trésorier de la tontine liée.
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        description: ID du paiement à valider
+    responses:
+      '200':
+        description: Paiement validé avec succès
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: Paiement validé avec succès
+                paiement:
+                  $ref: '#/components/schemas/Paiement'
+      '401':
+        description: Accès refusé - rôle insuffisant
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: Accès refusé : rôle insuffisant
+      '404':
+        description: Paiement non trouvé
+      '500':
+        description: Erreur interne du serveur
+    security:
+      - bearerAuth: []
+
+ */
+
+public async valider({ params, auth, response }: HttpContext) {
+  const user = auth.authenticate()
+  const paiement = await Paiement.findOrFail(params.id)
+ 
+
+  // Vérifier que l'utilisateur est admin ou trésorier de cette tontine
+  const membership = await TontineMemberShip.query()
+    .where('tontine_id', paiement.cycle.tontineId)
+    .where('user_id', (await user).id)
+    .first()
+
+  if (!membership || !['admin', 'treasurer'].includes(membership.role)) {
+    return response.unauthorized({ message: "Accès refusé : rôle insuffisant" })
+  }
+
+  // Marquer le paiement comme validé
+  paiement.status = 'valide'
+  paiement.validate_by = (await user).id
+  await paiement.save()
+
+  return { message: "Paiement validé avec succès", paiement }
+}
+
 }
