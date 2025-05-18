@@ -21,15 +21,26 @@ export default class PaymentsController {
    *       500:
    *         description: Erreur serveur
    */
-  public async index({ response }: HttpContext) {
-    try {
-      const payments = await Paiement.query().preload('user').preload('cycle')
-      return response.ok(payments)
-    } catch (error) {
-      console.error('Erreur lors de la récupération des paiements :', error)
-      return response.internalServerError({ message: 'Erreur serveur' })
+public async index({ auth, response }: HttpContext) {
+  try {
+    const user = auth.authenticate()
+    if (!user) {
+      return response.unauthorized({ message: 'Utilisateur non authentifié' })
     }
+
+    const payments = await Paiement.query()
+      .where('user_id', (await user).id)
+      .preload('cycle', (cycleQuery) => {
+        cycleQuery.preload('tontine') // Si tu veux la tontine aussi
+      })
+
+    return response.ok(payments)
+  } catch (error) {
+    console.error('Erreur lors de la récupération des paiements :', error)
+    return response.internalServerError({ message: 'Erreur serveur' })
   }
+}
+
 
   /**
    * @swagger

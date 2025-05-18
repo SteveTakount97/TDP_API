@@ -6,8 +6,8 @@ import Header from '@/component/header'
 type Payment = {
   id: number
   paidAt: string
-  amount_per_cycle: number
-  payment_method: string
+  amountPerCycle: number
+  paymentMethod: string
   status: 'en_attente' | 'valide' | 'rejeté'
   note?: string
 }
@@ -28,6 +28,7 @@ export default function PaymentHistory() {
       const response = await api.get(`/payments`)
       const data = Array.isArray(response.data) ? response.data : response.data.data || []
       setPayments(data)
+      console.log('data paiment', data)
     } catch (err) {
       console.error('Erreur de chargement:', err)
       setError('Erreur de chargement des paiements.')
@@ -78,9 +79,9 @@ export default function PaymentHistory() {
                 <tbody className="divide-y divide-gray-100 text-gray-700">
                   {payments.map((payment) => (
                     <tr key={payment.id} className="hover:bg-gray-50 transition">
-                      <td className="px-4 py-3">{new Date(payment.paidAt).toLocaleDateString()}</td>
-                      <td className="px-4 py-3 font-medium">{payment.amount_per_cycle} FCFA</td>
-                      <td className="px-4 py-3 capitalize">{payment.payment_method}</td>
+                      <td className="px-4 py-3 font-bold">{new Date(payment.paidAt).toLocaleDateString()}</td>
+                      <td className="px-4 py-3 font-medium text-green-500">{payment.amountPerCycle} FCFA</td>
+                      <td className="px-4 py-3 capitalize">{payment.paymentMethod}</td>
                       <td className="px-4 py-3">
                         <span
                           className={`px-3 py-1 rounded-full text-xs font-semibold ${statusColors[payment.status]}`}
