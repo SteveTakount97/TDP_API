@@ -2,12 +2,14 @@
 
 import { Menu, X } from 'lucide-react'
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 
 
 const useAuth = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const router = useRouter()
 
   // directement au montage du composant
   useEffect(() => {
@@ -17,7 +19,9 @@ const useAuth = () => {
 
   const logout = () => {
     localStorage.removeItem('token') 
+    localStorage.removeItem('user')
     setIsAuthenticated(false)
+    router.push('/');
   }
 
   return { isAuthenticated, logout }

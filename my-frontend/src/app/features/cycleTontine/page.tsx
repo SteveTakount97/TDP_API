@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge'
 import { RotateCw, PlusCircle } from 'lucide-react'
 import Link from 'next/link'
 import api from '@/lib/axios'
+import Header from '@/component/header'
 
 interface Cycle {
   id: string
@@ -56,23 +57,19 @@ export default function CyclesPage() {
 
   return (
     <>
-       <header className="bg-black text-white shadow-md border-b relative">
+     <Header/>
+    <main className="min-h-screen bg-black p-6">
+        <header className="bg-black text-white shadow-md relative">
         <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
           <h1 className="text-3xl font-bold text-white">Gestion de Mes Paiements</h1>
           <Link href="/features/tontine/create" className="flex items-center gap-2 bg-primary border px-4 py-2 rounded-lg text-sm shadow-sm transition">
          <PlusCircle className="w-4 h-4 bg-green-600 text-purple-800" />
-            Ajouter Un Versement
+            Effectuer Un Versement
           </Link>
         </div>
       </header>
-    <main className="min-h-screen bg-black p-6">
       <Tabs defaultValue="cycles" className="w-full max-w-5xl mx-auto">
-        <TabsList className="mb-6">
-          <TabsTrigger value="cycles" className="flex items-center gap-2 text-base text-white border cursor-pointer hover:underline">
-            <RotateCw className="h-5 w-5 text-white" />
-            Cycles Tontines
-          </TabsTrigger>
-        </TabsList>
+       
 
         <TabsContent value="cycles">
           <Card className="rounded-2xl shadow-lg border bg-black cursor-pointer">

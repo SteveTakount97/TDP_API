@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import api from '@/lib/axios'
 import Header from '@/component/header'
+import Features from '@/component/fonctionnalite'
 
 type Payment = {
   id: number
@@ -10,6 +11,14 @@ type Payment = {
   paymentMethod: string
   status: 'en_attente' | 'valide' | 'rejeté'
   note?: string
+  cycle: {
+    id: number 
+    tontine:{
+      id: number
+      amountPerCycle: string
+    }
+  }
+
 }
 
 const statusColors: Record<Payment['status'], string> = {
@@ -70,8 +79,9 @@ export default function PaymentHistory() {
                 <thead className="bg-gray-100 text-gray-600 uppercase text-xs">
                   <tr>
                     <th className="px-4 py-3 text-left">Date</th>
-                    <th className="px-4 py-3 text-left">Montant</th>
+                    <th className="px-4 py-3 text-left">Montant Versé</th>
                     <th className="px-4 py-3 text-left">Méthode</th>
+                    <th className="px-4 py-3 text-left">Montant attendu</th>
                     <th className="px-4 py-3 text-left">Statut</th>
                     <th className="px-4 py-3 text-left">Note</th>
                   </tr>
@@ -82,6 +92,7 @@ export default function PaymentHistory() {
                       <td className="px-4 py-3 font-bold">{new Date(payment.paidAt).toLocaleDateString()}</td>
                       <td className="px-4 py-3 font-medium text-green-500">{payment.amountPerCycle} FCFA</td>
                       <td className="px-4 py-3 capitalize">{payment.paymentMethod}</td>
+                      <td className="px-4 py-3 capitalize text-red-500">{payment?.cycle?.tontine?.amountPerCycle}</td>
                       <td className="px-4 py-3">
                         <span
                           className={`px-3 py-1 rounded-full text-xs font-semibold ${statusColors[payment.status]}`}
@@ -98,6 +109,7 @@ export default function PaymentHistory() {
           )}
         </div>
       </div>
+       <Features/>
     </>
   )
 }

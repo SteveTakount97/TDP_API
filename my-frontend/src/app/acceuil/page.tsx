@@ -55,6 +55,7 @@ export default function DashboardPage() {
   const handleLogout = () => {
     console.log("Déconnexion déclenchée");
     localStorage.removeItem('token');
+      localStorage.removeItem('user')
     router.push('/auth/login');
   };
 
