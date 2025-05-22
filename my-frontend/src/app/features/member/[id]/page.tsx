@@ -8,8 +8,8 @@ import { Users, PlusCircle, Edit, Trash } from "lucide-react"
 import api from "@/lib/axios"
 import { useParams } from "next/navigation"
 import { useRouter } from "next/navigation"
-import Link from "next/link"
-import { ArrowLeft } from "lucide-react"
+import Header from "@/component/header"
+
 
 
 
@@ -159,16 +159,11 @@ useEffect(() => {
     }
   }
   return (
+    <>
+    <Header/>
     <div className="bg-black">
     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 min-h-screen bg-black text-white">
       <header className="mb-8 text-center shadow-md w-full pb-2 ">
-         <Link
-        href="/features/tontine"
-        className="flex items-center hover:underline shadow-2xl w-20 rounded-2xl"
-         >
-      <ArrowLeft className="w-5 h-5 mr-1" />
-      Retour
-          </Link>
         <h1 className="text-3xl font-bold mb-2">Gestion des membres</h1>
         <p className="text-sm mb-2">
           Retrouvez ici la liste des membres liés à cette tontine, avec leur rôle respectif.
@@ -363,4 +358,6 @@ useEffect(() => {
 )}
     </main>
     </div>
+    </>
   )}
+  

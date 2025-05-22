@@ -285,7 +285,6 @@ public async store({ request, response, auth, params }: HttpContext) {
     tags:
       - Paiements
     summary: Valider un paiement
-    description: Valide un paiement si l'utilisateur est admin ou trésorier de la tontine liée.
     parameters:
       - in: path
         name: id
@@ -295,7 +294,7 @@ public async store({ request, response, auth, params }: HttpContext) {
         description: ID du paiement à valider
     responses:
       '200':
-        description: Paiement validé avec succès
+        description: Valide un paiement si l'utilisateur est admin ou trésorier de la tontine liée.
         content:
           application/json:
             schema:
@@ -305,17 +304,9 @@ public async store({ request, response, auth, params }: HttpContext) {
                   type: string
                   example: Paiement validé avec succès
                 paiement:
-                  $ref: '#/components/schemas/Paiement'
+                
       '401':
         description: Accès refusé - rôle insuffisant
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                message:
-                  type: string
-                  example: Accès refusé : rôle insuffisant
       '404':
         description: Paiement non trouvé
       '500':

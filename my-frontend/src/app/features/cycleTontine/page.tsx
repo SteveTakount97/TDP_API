@@ -17,9 +17,12 @@ interface Cycle {
   endDate: string
   tontine: {
     name: string
-    amountPerCycle: string
+    amountPerCycle: number
   }
 }
+const format = (amountPerCycle: number) => {
+  return amountPerCycle.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' FCFA';
+};
 
 export default function CyclesPage() {
   const [cycles, setCycles] = useState<Cycle[]>([])
@@ -89,7 +92,7 @@ export default function CyclesPage() {
 
                       <div className="flex justify-between">
                         <span className="font-medium">Montant par cycle :</span>
-                        <span className='text-black'>{cycle.tontine.amountPerCycle ? `${cycle.tontine.amountPerCycle} €` : 'Non défini'}</span>
+                        <span className='text-black'>{new Intl.NumberFormat('fr-FR').format(cycle.tontine.amountPerCycle)} FCFA</span>
                       </div>
 
                       <div className="flex justify-between">

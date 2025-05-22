@@ -15,7 +15,8 @@ type Payment = {
     id: number 
     tontine:{
       id: number
-      amountPerCycle: string
+      amountPerCycle: number
+      name: string
     }
   }
 
@@ -26,6 +27,8 @@ const statusColors: Record<Payment['status'], string> = {
   valide: 'bg-green-100 text-green-800',
   rejeté: 'bg-red-100 text-red-800',
 }
+
+
 
 export default function PaymentHistory() {
   const [payments, setPayments] = useState<Payment[]>([])
@@ -82,6 +85,7 @@ export default function PaymentHistory() {
                     <th className="px-4 py-3 text-left">Montant Versé</th>
                     <th className="px-4 py-3 text-left">Méthode</th>
                     <th className="px-4 py-3 text-left">Montant attendu</th>
+                    <th className="px-4 py-3 text-left">Nom Tontine</th>
                     <th className="px-4 py-3 text-left">Statut</th>
                     <th className="px-4 py-3 text-left">Note</th>
                   </tr>
@@ -90,9 +94,12 @@ export default function PaymentHistory() {
                   {payments.map((payment) => (
                     <tr key={payment.id} className="hover:bg-gray-50 transition">
                       <td className="px-4 py-3 font-bold">{new Date(payment.paidAt).toLocaleDateString()}</td>
-                      <td className="px-4 py-3 font-medium text-green-500">{payment.amountPerCycle} FCFA</td>
+                      <td className="px-4 py-3 font-medium text-green-500">{new Intl.NumberFormat('fr-FR').format(payment.amountPerCycle)} FCFA</td>
                       <td className="px-4 py-3 capitalize">{payment.paymentMethod}</td>
-                      <td className="px-4 py-3 capitalize text-red-500">{payment?.cycle?.tontine?.amountPerCycle}</td>
+                      <td className="px-4 py-3 font-medium text-red-600">
+                       {new Intl.NumberFormat('fr-FR').format(payment?.cycle?.tontine?.amountPerCycle || 0)} FCFA
+                      </td>
+                      <td className="px-4 py-3 capitalize">{payment?.cycle?.tontine?.name}</td>
                       <td className="px-4 py-3">
                         <span
                           className={`px-3 py-1 rounded-full text-xs font-semibold ${statusColors[payment.status]}`}

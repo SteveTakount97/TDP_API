@@ -147,21 +147,22 @@ export default function DashboardPage() {
       )}
     </div>
 
-    {/* Upload fichier */}
-    <label className="block text-sm font-medium text-gray-700 mb-1">
+   {/* Upload fichier */}
+  <div>
+    <label
+      htmlFor="file-upload"
+      className="cursor-pointer inline-block bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium py-2 px-4 rounded-full transition"
+    >
       Modifier la photo
     </label>
     <input
+      id="file-upload"
       type="file"
       accept="image/*"
       onChange={handleFileChange}
-      className="mb-6 block w-full text-sm text-gray-500
-        file:mr-4 file:py-2 file:px-4
-        file:rounded-full file:border-0
-        file:text-sm file:font-semibold
-        file:bg-indigo-50 file:text-indigo-700
-        hover:file:bg-indigo-100"
+      className="hidden"
     />
+  </div>
 
     {/* Infos utilisateur */}
     <div className="text-sm space-y-2">

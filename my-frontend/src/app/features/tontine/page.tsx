@@ -157,7 +157,7 @@ export default function TontinePage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-sm text-gray-700">
                   <div className="flex items-center gap-2">
                     <RotateCw className="h-4 w-4 text-primary" />
-                    <span>Montant / cycle : <strong>{tontine.amountPerCycle} €</strong></span>
+                    <span>Montant / cycle : <strong>{new Intl.NumberFormat('fr-FR').format(tontine.amountPerCycle)} FCFA</strong></span>
                   </div>
                   <div className="flex items-center gap-2">
                     <CalendarCheck className="h-4 w-4 text-primary" />
