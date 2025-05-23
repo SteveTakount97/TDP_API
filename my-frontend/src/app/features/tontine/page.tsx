@@ -4,11 +4,12 @@ import { useEffect, useState } from 'react'
 import { Tabs, TabsList, TabsTrigger} from '@/components/ui/tabs'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { CalendarCheck, RotateCw, PlusCircle, Edit, Trash, Users } from 'lucide-react'
+import { CalendarCheck, RotateCw, PlusCircle, Edit, Trash, Users, CreditCard } from 'lucide-react'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import api from '@/lib/axios'
+import Header from '@/component/header'
 
 
 interface Tontine {
@@ -60,6 +61,9 @@ export default function TontinePage() {
 
   const handleClick = (id: string) => {
     router.push(`/features/member/${id}`);
+  };
+    const handlePayment = (id: string) => {
+    router.push(`/features/tontine/payment/${id}`);
   };
   
   //fontion pour supprimer une Tontine
@@ -114,13 +118,12 @@ export default function TontinePage() {
   setNewDescription(tontine.description)
    }
   return (
-    <div className="min-h-screen text-white bg-black">
-      {/* Header */}
+    <div className="min-h-screen text-white">
+     <Header />
+      {/* Contenu principal */}
+      <main className="p-6 max-w-6xl mx-auto space-y-6 text-white">
+          {/* Header */}
       <header className="bg-black text-white shadow-md border-b">
-        <Link href="/acceuil" className="flex items-center text-white hover:underline absolute top-4 left-4 ">
-       <ArrowLeft className="w-5 h-5 mr-1" />
-       Retour 
-       </Link>
         <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
           <h1 className="text-3xl font-bold text-white">Gestion Tontines</h1>
           <Link href="/features/tontine/create" className="flex items-center gap-2 bg-primary border px-4 py-2 rounded-lg text-sm shadow-sm transition">
@@ -129,17 +132,7 @@ export default function TontinePage() {
           </Link>
         </div>
       </header>
-     
-      {/* Contenu principal */}
-      <main className="p-6 max-w-6xl mx-auto space-y-6 text-white">
-        <Tabs defaultValue="tontines" className="w-full text-white">
-        <TabsList className="mb-4 gap-4">
-          <TabsTrigger value="Tontines" className="flex items-center gap-1 hover:text-red-500 cursor-pointer shadow-2xl">
-            <RotateCw className="h-4 w-4" />
-            Mes Tontine
-          </TabsTrigger>
-        </TabsList>
-      </Tabs>  
+    
         {tontines.length > 0 ? (
           tontines.map((tontine:any) => (
             <Card key={tontine.id} className="shadow-sm border border-gray-200 bg-white rounded-2xl hover:shadow-md transition duration-200">
@@ -176,6 +169,10 @@ export default function TontinePage() {
                   <button onClick={() => handleClick(tontine.id)} className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 cursor-pointer">
                     <Users className="h-5 w-5" />
                     Voir les membres
+                  </button>
+                   <button onClick={() => handlePayment(tontine.id)} className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 cursor-pointer">
+                    <CreditCard className="h-5 w-5 text-green-400" />
+                    Cotisation du cycle
                   </button>
                   <button onClick={() => selectTontine(tontine)}className="flex items-center gap-2 text-sm text-red-600 hover:text-red-800 cursor-pointer">
                     <Trash className="h-5 w-5" />

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Banknote, User, UsersRound } from 'lucide-react';
+import { Banknote, CreditCard, HandCoins, PiggyBank, User, UsersRound, Wallet } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import axios from 'axios';
@@ -200,8 +200,7 @@ export default function DashboardPage() {
   className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 "
   animate={{ x: [0, -20, 0] }} 
                transition={{
-                    duration: 3,
-                    repeat: Infinity,       
+                    duration: 3,     
                     repeatType: 'loop',    
                     ease: 'easeInOut',
                     }}
@@ -218,13 +217,12 @@ export default function DashboardPage() {
 
   <CardShortcut
     onClick={() => openDrawer('payments')}
-    icon={<User className="text-green-600 w-8 h-8" />}
+    icon={<CreditCard className="text-green-600 w-8 h-8" />}
     title="Paiements"
     description="Suivre les contributions"
     bgHover="hover:bg-green-50"
   />
-
-  <CardShortcut
+    <CardShortcut
     onClick={() => openDrawer('users')}
     icon={<UsersRound className="text-purple-600 w-8 h-8" />}
     title="Utilisateurs"

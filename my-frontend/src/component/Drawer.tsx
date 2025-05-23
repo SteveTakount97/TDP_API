@@ -1,4 +1,4 @@
-import { X, PlusCircle, Users, History, CreditCard, Receipt, Bell, Pencil, Trash2, Eye, Send, UserX, FileText, Settings } from 'lucide-react'
+import { X, PlusCircle, Users, History, CreditCard, Receipt, Bell, Pencil, Trash2, Eye, UserX, FileText, Settings, HandCoins, ListChecks, PiggyBank, LineChart } from 'lucide-react'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -18,8 +18,10 @@ export default function Drawer({ activeDrawer, closeDrawer }: DrawerProps) {
     activeDrawer === 'tontines'
       ? [
           { icon: <PlusCircle className="w-4 h-4 text-amber-200" />, label: 'Créer une tontine', path: 'features/createTontine' },
+          { icon: <HandCoins className="w-4 h-4 text-green-600" />, label: 'Demande de Prêt' },
           { icon: <Users className="w-4 h-4 text-blue-300" />, label: 'Mes groupes', path: 'features/tontine' },
           { icon: <History className="w-4 h-4 text-gray-700" />, label: 'Historique' },
+          { icon: <PiggyBank className="w-4 h-4 text-green-600" />, label: 'Caisse Commune' },
           {icon: <Pencil className="w-4 h-4 text-blue-600" />, label: "Modifier une Tontine", path: 'features/tontine'},
           {icon: <Trash2 className="w-4 h-4 text-red-600" />, label: 'Supprimer une Tontine'},
           { icon: <Eye className="w-4 h-4 text-gray-700" />, label: "Detail d'une Tontine"},
@@ -29,17 +31,19 @@ export default function Drawer({ activeDrawer, closeDrawer }: DrawerProps) {
           { icon: <CreditCard className="w-4 h-4 text-gray-700" />, label: 'Mes paiements', path: 'features/cycleTontine'  },
           { icon: <Receipt className="w-4 h-4 text-amber-200" />, label: 'Reçus' },
           { icon: <History className="w-4 h-4 text-green-500" />, label: "Historique", path: 'features/payment'  },
+          { icon: <LineChart className="w-4 h-4 text-green-600" />, label: 'Investissiment' },
           { icon: <Eye className="w-4 h-4 text-gray-700" />, label:"Detail Transaction"},
           { icon: <Bell className="w-4 h-4 text-red-500" />, label: 'Alertes' },
         ]
-         : activeDrawer === 'users'
-          ? [
+          : activeDrawer === 'users'
+      ? [
           { icon: <FileText className="w-4 h-4 text-green-600" />, label: 'Mes Informations' },
+           { icon: <ListChecks className="w-4 h-4 text-green-600" />, label: 'Status Demandes' },
           { icon: <Receipt className="w-4 h-4" />, label: 'Status Payment Reçu' },
           { icon: <UserX className="w-4 h-4 text-red-600" />, label: "Désactiver Mon Compte"},
           { icon: <Settings className="w-4 h-4 text-gray-900" />, label: 'Paramètres' },
           { icon: <Bell className="w-4 h-4 text-red-500" />, label: 'Alertes' },
-        ]
+      ]
       : []
    
   const handleNavigate = (path: any) => {
