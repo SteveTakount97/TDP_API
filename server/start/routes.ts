@@ -75,8 +75,10 @@ router.group(() => {
   router.get('/payments/cycle/:cycleId', paiementController.show)
   router.patch('/payment/:id/valider', paiementController.valider)
   router.get('/payments', paiementController.index)
-  router.put('payments/:id', paiementController.update)
-  router.delete('payments/:id', paiementController.destroy)
+  router.get('/tontine/:tontineId/payments', paiementController.indexPayment).middleware([new AdminMiddleware().handle])
+  router.put('/payments/:paymentId/status/:tontineId', paiementController.updateStatus).middleware([new AdminMiddleware().handle])
+  router.put(':payments/:id', paiementController.update)
+  router.delete('/payments/:id', paiementController.destroy)
   
   //gestion des cycles
   router.post('/Cycle-tontine/', cycleController.store)

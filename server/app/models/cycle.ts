@@ -38,7 +38,9 @@ export default class Cycle extends BaseModel {
   })
   public beneficiary!: relations.BelongsTo<typeof User>
 
-  @hasMany(() => Paiement)
+  @hasMany(() => Paiement, {
+    foreignKey: 'cycleId',
+  })
   public payments!: relations.HasMany<typeof Paiement> //Chaque cycle contient plusieurs paiements (de chaque membre).
 
   @column.dateTime({ autoCreate: true })

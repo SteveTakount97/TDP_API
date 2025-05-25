@@ -12,7 +12,7 @@ export default class PaymentsController {
    *   get:
    *     tags:
    *       - Payments
-   *     summary: Liste de tous les paiements
+   *     summary: Liste de tous les paiements d'un utisateur dans ses différents tontine
    *     security:
    *       - bearerAuth: []
    *     responses:
@@ -40,6 +40,103 @@ public async index({ auth, response }: HttpContext) {
     return response.internalServerError({ message: 'Erreur serveur' })
   }
 }
+  /**
+   * @swagger
+   * /tontine/:id/payments:
+   *   get:
+   *     tags:
+   *       - Payments
+   *     summary: Liste de tous les paiements des users membre d'une tontine
+   *     security:
+   *       - bearerAuth: []
+   *     responses:
+   *       200:
+   *         description: Paiements récupérés avec succès
+   *       500:
+   *         description: Erreur serveur
+   */
+  public async indexPayment({ params, auth, response }: HttpContext) {
+    const user = await auth.authenticate()
+    const tontineId = params.tontineId
+
+     if (!user){
+      return response.unauthorized ("Vous n'êtes pas Autoriser à poursuivre cetteaction")
+     }
+
+    // Vérifier si l'utilisateur est membre de la tontine avec rôle admin ou treasurer
+    const membership = await TontineMemberShip
+      .query()
+      .where('user_id', user.id)
+      .andWhere('tontine_id', tontineId)
+      .first()
+
+    if (!membership || !['admin', 'treasurer'].includes(membership.role)) {
+      return response.unauthorized({ message: 'Accès non autorisé' })
+    }
+    // Récupérer les paiements liés à la tontine
+   const payments = await Paiement
+  .query()
+  .whereHas('cycle', (cycleQuery) => {
+    cycleQuery.where('tontine_id', tontineId)
+  })
+  .preload('user')
+  .preload('cycle')
+  .orderBy('created_at', 'desc')
+
+
+    return payments
+      
+  }
+
+
+  public async updateStatus({ params, request, auth, response }: HttpContext) {
+    const user = await auth.authenticate()
+
+     if (!user){
+      return response.unauthorized ("Vous n'êtes pas Autoriser à poursuivre cetteaction")
+     }
+
+    const paymentId = params.paymentId
+    const { status } = request.only(['status'])
+
+    if (!['valide', 'refuse'].includes(status)) {
+      return response.badRequest({ message: 'Statut invalide' })
+    }
+     console.log('👉 Status reçu:', status)
+
+   // Récupération du paiement et de son cycle (et sa tontine)
+    const payment = await Paiement.query()
+    .where('id', paymentId)
+    .preload('cycle') 
+    .first()
+
+    if (!payment) {
+      return response.notFound({ message: 'Paiement introuvable' })
+    }
+    
+     const tontineId = payment.cycle.tontineId
+     console.log('tontine id', tontineId)
+
+    if (!tontineId) {
+    return response.badRequest({ message: 'Tontine ID is required' })
+    }
+
+    // Vérification du rôle via la table TontineMemberShip
+    const membership = await TontineMemberShip.query()
+      .where('user_id', user.id)
+      .andWhere('tontine_id', tontineId)
+      .first()
+
+    if (!membership || !['admin', 'treasurer'].includes(membership.role)) {
+      return response.unauthorized({ message: 'Accès non autorisé' })
+    }
+
+    payment.status = status
+   // payment.validate_by = user.id  //à décommenter plus tard!
+    await payment.save()
+
+    return response.ok({ message: `Statut du paiement mis à jour avec succès`, payment })
+  }
 
 
   /**
@@ -289,8 +386,6 @@ public async store({ request, response, auth, params }: HttpContext) {
       - in: path
         name: id
         required: true
-        schema:
-          type: integer
         description: ID du paiement à valider
     responses:
       '200':

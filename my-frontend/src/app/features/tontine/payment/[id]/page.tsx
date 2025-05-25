@@ -33,7 +33,7 @@ export default function PaymentsTable({ currentUserRole }: Props) {
   const [loading, setLoading] = useState(true)
   const params = useParams()
   const tontineId = params?.id
-
+  console.log ('id tontine', tontineId)
   const fetchPayments = async () => {
     try {
       setLoading(true)
@@ -56,11 +56,12 @@ export default function PaymentsTable({ currentUserRole }: Props) {
     newStatus: 'valide' | 'refuse'
   ) => {
     try {
-      await api.put(`/payments/${paymentId}/status`, { status: newStatus })
-      toast.success(`Paiement ${newStatus === 'valide' ? 'validé' : 'rejeté'} avec succès.`)
+      await api.put(`/payments/${paymentId}/status/${tontineId}`, { status: newStatus })
+      toast.success(`Paiement ${newStatus === 'valide' ? 'validé' : 'refuse'} avec succès.`)
       fetchPayments()
     } catch (error) {
       toast.error("Erreur lors de la mise à jour du statut.")
+      console.log('erreur', error)
     }
   }
 
@@ -71,7 +72,7 @@ export default function PaymentsTable({ currentUserRole }: Props) {
   return (
     <>
       <Header />
-      <div className="px-4 mt-6">
+      <div className="px-4 mt-6 min-h-screen">
         <h2 className="text-xl font-semibold mb-4">Paiements des membres</h2>
 
         {loading ? (
@@ -102,7 +103,7 @@ export default function PaymentsTable({ currentUserRole }: Props) {
                     <td className="px-4 py-3">
                 
                        { payment.status === 'en_attente' && (
-                          <div className="flex gap-2">
+                          <div className="flex gap-2 cursor-pointer">
                             <button
                               onClick={() => updatePaymentStatus(payment.id, 'valide')}
                               className="flex items-center gap-1 px-3 py-1 text-xs bg-green-100 text-green-700 rounded hover:bg-green-200"

@@ -39,7 +39,10 @@ export default class Paiement extends BaseModel {
   @belongsTo(() => User)
   public user!: relations.BelongsTo<typeof User>
 
-  @belongsTo(() => Cycle)
+  @belongsTo(() => Cycle, {
+    foreignKey: 'cycleId',
+  })
+  
   public cycle!: relations.BelongsTo<typeof Cycle>
 
   @belongsTo(() => User, { foreignKey: 'validatedBy' })
