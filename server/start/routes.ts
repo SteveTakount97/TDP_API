@@ -18,6 +18,7 @@ import CyclesController from '#controllers/cycles_controller'
 import SwaggerController from './swagger.js'
 import AuthMiddleware from '#middleware/auth_middleware'
 import AdminMiddleware from '#middleware/admin_middleware'
+import LoansController from '#controllers/loans_controller'
 
 
 const userController = new UsersController()
@@ -26,6 +27,7 @@ const tontineController = new TontinesController()
 const transactionController = new TransactionLogsController()
 const paiementController = new PaymentsController()
 const membershipController = new TontineMembershipsController()
+const loanController = new LoansController()
 const cycleController = new CyclesController()
 const swaggerController = new SwaggerController()
 
@@ -79,6 +81,10 @@ router.group(() => {
   router.put('/payments/:paymentId/status/:tontineId', paiementController.updateStatus).middleware([new AdminMiddleware().handle])
   router.put(':payments/:id', paiementController.update)
   router.delete('/payments/:id', paiementController.destroy)
+
+  //loans
+  router.post('/loans/:tontineId', loanController.store)
+  router.get('/loan/:tontineId', loanController.index)
   
   //gestion des cycles
   router.post('/Cycle-tontine/', cycleController.store)

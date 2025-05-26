@@ -1,8 +1,9 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, belongsTo } from '@adonisjs/lucid/orm'
+import { BaseModel, column, belongsTo, hasMany } from '@adonisjs/lucid/orm'
 import * as relations from '@adonisjs/lucid/types/relations'
 import User from './user.js'
 import Tontine from './tontine.js'
+import Loan from './loan.js'
 
 
 export default class TontineMemberShip extends BaseModel {
@@ -39,8 +40,13 @@ export default class TontineMemberShip extends BaseModel {
   foreignKey: 'user_id', //clé étrangère
   })
  public user!: relations.BelongsTo<typeof User>
+ 
+ @hasMany(() => Loan, {
+  foreignKey: 'memberId',
+ })
+  public loans!: relations.HasMany<typeof Loan>
 
-
+ 
   @belongsTo(() => Tontine, {
   foreignKey: 'tontine_id', 
   })
