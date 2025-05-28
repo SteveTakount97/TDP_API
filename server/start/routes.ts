@@ -19,6 +19,7 @@ import SwaggerController from './swagger.js'
 import AuthMiddleware from '#middleware/auth_middleware'
 import AdminMiddleware from '#middleware/admin_middleware'
 import LoansController from '#controllers/loans_controller'
+import SolidarityEventsController from '#controllers/solidarity_events_controller'
 
 
 const userController = new UsersController()
@@ -30,6 +31,7 @@ const membershipController = new TontineMembershipsController()
 const loanController = new LoansController()
 const cycleController = new CyclesController()
 const swaggerController = new SwaggerController()
+const solidarityevent = new SolidarityEventsController()
 
 router.get('/', async () => {
   return 'Bienvenue sur l\'API TDP Tontine Digital PlateForm'
@@ -86,6 +88,9 @@ router.group(() => {
   router.post('/loans/:tontineId', loanController.store)
   router.get('/loan/:tontineId', loanController.index)
   
+  //Solidarity
+  router.post('/solidarity-events/:tontineId', solidarityevent.store)
+ // router.get('/solidarity-events/:tontineId', solidarityevent.store)
   //gestion des cycles
   router.post('/Cycle-tontine/', cycleController.store)
   router.get('/Cycle-tontine/:id', cycleController.show)

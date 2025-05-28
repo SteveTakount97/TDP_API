@@ -16,7 +16,7 @@ export default class extends BaseSchema {
         .integer('member_id')
         .unsigned()
         .references('id')
-        .inTable('tontine_memberships')
+        .inTable('tontine_member_ships')
         .onDelete('CASCADE')
       table.string('title')
       table.text('description').nullable()

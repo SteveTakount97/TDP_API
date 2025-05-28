@@ -16,7 +16,7 @@ export default class extends BaseSchema {
         .integer('member_id')
         .unsigned()
         .references('id')
-        .inTable('tontine_memberships')
+        .inTable('tontine_member_ships')
         .onDelete('CASCADE')
       table.float('amount').notNullable()
       table.timestamp('paid_at', { useTz: true }).defaultTo(this.now())
