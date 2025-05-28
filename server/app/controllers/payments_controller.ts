@@ -88,6 +88,74 @@ public async index({ auth, response }: HttpContext) {
       
   }
 
+/**
+ * @swagger
+ * /paiements/{paymentId}/statut:
+ *   patch:
+ *     tags:
+ *       - Paiements
+ *     summary: Mettre à jour le statut d'un paiement
+ *     description: Met à jour le statut (`valide` ou `refuse`) d’un paiement, uniquement si l’utilisateur est **admin** ou **trésorier** de la tontine associée.
+ *     parameters:
+ *       - in: path
+ *         name: paymentId
+ *         required: true
+ *         description: Identifiant du paiement à mettre à jour
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - status
+ *             properties:
+ *               status:
+ *                 type: string
+ *                 enum: [valide, refuse]
+ *                 example: valide
+ *     responses:
+ *       '200':
+ *         description: Statut du paiement mis à jour avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Statut du paiement mis à jour avec succès
+ *                 payment:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                       example: "12345"
+ *                     status:
+ *                       type: string
+ *                       example: "valide"
+ *                     cycle:
+ *                       type: object
+ *                       properties:
+ *                         id:
+ *                           type: string
+ *                           example: "c1"
+ *                         tontineId:
+ *                           type: string
+ *                           example: "t1"
+ *       '400':
+ *         description: Requête invalide (statut incorrect ou données manquantes)
+ *       '401':
+ *         description: Accès non autorisé — rôle insuffisant ou utilisateur non authentifié
+ *       '404':
+ *         description: Paiement introuvable
+ *       '500':
+ *         description: Erreur interne du serveur
+ *     security:
+ *       - bearerAuth: []
+ */
 
   public async updateStatus({ params, request, auth, response }: HttpContext) {
     const user = await auth.authenticate()
@@ -378,37 +446,53 @@ public async store({ request, response, auth, params }: HttpContext) {
 /**
  * @swagger
  * /paiements/{id}/valider:
-  post:
-    tags:
-      - Paiements
-    summary: Valider un paiement
-    parameters:
-      - in: path
-        name: id
-        required: true
-        description: ID du paiement à valider
-    responses:
-      '200':
-        description: Valide un paiement si l'utilisateur est admin ou trésorier de la tontine liée.
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                message:
-                  type: string
-                  example: Paiement validé avec succès
-                paiement:
-                
-      '401':
-        description: Accès refusé - rôle insuffisant
-      '404':
-        description: Paiement non trouvé
-      '500':
-        description: Erreur interne du serveur
-    security:
-      - bearerAuth: []
-
+ *   post:
+ *     tags:
+ *       - Paiements
+ *     summary: Valider un paiement
+ *     description: Valide un paiement si l'utilisateur est **admin** ou **trésorier** de la tontine associée.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Identifiant unique du paiement à valider
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Paiement validé avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Paiement validé avec succès
+ *                 paiement:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                       example: "12345"
+ *                     montant:
+ *                       type: number
+ *                       example: 100.0
+ *                     statut:
+ *                       type: string
+ *                       example: "validé"
+ *                     date_validation:
+ *                       type: string
+ *                       format: date-time
+ *                       example: "2025-05-28T15:30:00Z"
+ *       '401':
+ *         description: Accès non autorisé — rôle insuffisant pour effectuer cette action
+ *       '404':
+ *         description: Paiement introuvable
+ *       '500':
+ *         description: Erreur interne du serveur
+ *     security:
+ *       - bearerAuth: []
  */
 
 public async valider({ params, auth, response }: HttpContext) {
