@@ -33,9 +33,9 @@ export default class SolidarityEventsController {
         amount: payload.amount,
         mandat: payload.mandat,
         tontineId,
-        memberId: membership.id, // 👈 clé étrangère correcte
+        memberId: membership.id, //  clé étrangère correcte
         status: 'en_cours',
-        date_issued: DateTime.now(), // Utilise camelCase si ton modèle l’attend ainsi
+        date_issued: DateTime.now(), 
       })
 
       return response.created(event)
@@ -43,5 +43,25 @@ export default class SolidarityEventsController {
       console.error('Erreur lors de la création de l’événement :', error)
       return response.badRequest({ message: 'Impossible de créer l’événement', error })
     }
+  }
+
+  public async ongoing ({params, response} : HttpContext) {
+    const tontineId = params.tontineId
+
+    try{
+      const events = await SolidarityEvent
+      .query()
+      .where('tontine_id', tontineId)
+      .andWhere('status', 'en_cours')
+      
+      const formatEvents = events.map (event =>({
+        ...event.serialize(),
+      }))
+      return response.ok(formatEvents)
+      
+    }catch(error){
+      console.log('Erreur lors de la recupération des events en_cours', error)
+    }
+    
   }
 }

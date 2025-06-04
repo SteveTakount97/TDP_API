@@ -170,7 +170,7 @@ public async index({ auth, response }: HttpContext) {
     if (!['valide', 'refuse'].includes(status)) {
       return response.badRequest({ message: 'Statut invalide' })
     }
-     console.log('👉 Status reçu:', status)
+     console.log('Status reçu:', status)
 
    // Récupération du paiement et de son cycle (et sa tontine)
     const payment = await Paiement.query()

@@ -2,6 +2,7 @@ import { X, PlusCircle, Users, History, CreditCard, Receipt, Bell, Pencil, Trash
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+import path from 'path'
 
 
 
@@ -18,7 +19,7 @@ export default function Drawer({ activeDrawer, closeDrawer }: DrawerProps) {
     activeDrawer === 'tontines'
       ? [
           { icon: <PlusCircle className="w-4 h-4 text-amber-200" />, label: 'Créer une tontine', path: 'features/createTontine' },
-          { icon: <HandCoins className="w-4 h-4 text-green-600" />, label: 'Demande de Prêt' },
+          { icon: <HandCoins className="w-4 h-4 text-green-600" />, label: 'Demande de Prêt', path: 'features/tontine' },
           { icon: <Users className="w-4 h-4 text-blue-300" />, label: 'Mes groupes', path: 'features/tontine' },
           { icon: <History className="w-4 h-4 text-gray-700" />, label: 'Historique' },
           { icon: <PiggyBank className="w-4 h-4 text-green-600" />, label: 'Caisse Commune' },

@@ -90,7 +90,7 @@ router.group(() => {
   
   //Solidarity
   router.post('/solidarity-events/:tontineId', solidarityevent.store)
- // router.get('/solidarity-events/:tontineId', solidarityevent.store)
+  router.get('/solidarity-events/:tontineId/ongoing', solidarityevent.ongoing)
   //gestion des cycles
   router.post('/Cycle-tontine/', cycleController.store)
   router.get('/Cycle-tontine/:id', cycleController.show)

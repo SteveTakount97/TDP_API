@@ -56,6 +56,7 @@ export default function PaymentHistory() {
   return (
     <>
       <Header />
+      <main className='min-h-screen'>
       <div className="max-w-5xl mx-auto px-4 py-8">
         <div className="bg-white rounded-2xl shadow-md p-6">
           <h2 className="text-2xl font-bold text-gray-800 mb-6">Historique des paiements</h2>
@@ -117,6 +118,7 @@ export default function PaymentHistory() {
         </div>
       </div>
        <Features/>
+       </main>
     </>
   )
 }

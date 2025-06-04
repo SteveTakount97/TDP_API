@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { Tabs, TabsList, TabsTrigger} from '@/components/ui/tabs'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { CalendarCheck, RotateCw, PlusCircle, Edit, Trash, Users, CreditCard } from 'lucide-react'
+import { CalendarCheck, RotateCw, PlusCircle, Edit, Trash, Users, CreditCard, HandCoins, PiggyBank } from 'lucide-react'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import { useRouter } from 'next/navigation'
@@ -61,6 +61,12 @@ export default function TontinePage() {
 
   const handleClick = (id: string) => {
     router.push(`/features/member/${id}`);
+  };
+   const handleSolidarity = (id: string) => {
+    router.push(`/features/solidarity/${id}`);
+  };
+   const handClick = (id: string) => {
+    router.push(`/createLoan/${id}`);
   };
     const handlePayment = (id: string) => {
     router.push(`/features/tontine/payment/${id}`);
@@ -161,7 +167,7 @@ export default function TontinePage() {
                     <span>Début : <strong>{new Date(tontine.startDate).toLocaleDateString()}</strong></span>
                   </div>
                 </div>
-                 <div className="flex gap-4 mt-4 cursor-pointer">
+                 <div className="flex gap-4 mt-6 cursor-pointer">
                   <button onClick={() => handleEditTontine(tontine)} className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 cursor-pointer">
                     <Edit className="h-5 w-5" />
                     Modifier
@@ -173,6 +179,14 @@ export default function TontinePage() {
                    <button onClick={() => handlePayment(tontine.id)} className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 cursor-pointer">
                     <CreditCard className="h-5 w-5 text-green-400" />
                     Cotisation du cycle
+                  </button>
+                   <button onClick={() => handClick(tontine.id)} className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 cursor-pointer">
+                    <HandCoins className="h-5 w-5 text-green-400" />
+                    Demander de Prêt
+                  </button>
+                  <button onClick={() => handleSolidarity(tontine.id)} className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 cursor-pointer">
+                    <PiggyBank className="h-5 w-5 text-fuchsia-500" />
+                    Solidarité
                   </button>
                   <button onClick={() => selectTontine(tontine)}className="flex items-center gap-2 text-sm text-red-600 hover:text-red-800 cursor-pointer">
                     <Trash className="h-5 w-5" />
