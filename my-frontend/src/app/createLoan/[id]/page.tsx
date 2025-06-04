@@ -68,7 +68,7 @@ export default function LoanForm() {
       <h2 className="text-xl font-bold">Demande de prêt</h2>
 
       <div>
-        <label className="block font-medium">Nom du prêt</label>
+        <label className="block font-medium">Objet de la demande</label>
         <input
           type="text"
           name="name"
@@ -90,7 +90,7 @@ export default function LoanForm() {
       </div>
 
       <div>
-        <label className="block font-medium">Montant (€)</label>
+        <label className="block font-medium">Montant (FCFA)</label>
         <input
           type="number"
           name="amount"

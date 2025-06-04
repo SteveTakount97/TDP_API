@@ -52,13 +52,13 @@ export default class SolidarityEventsController {
       const events = await SolidarityEvent
       .query()
       .where('tontine_id', tontineId)
-      .andWhere('status', 'en_cours')
+      
       
       const formatEvents = events.map (event =>({
         ...event.serialize(),
       }))
       return response.ok(formatEvents)
-      
+
     }catch(error){
       console.log('Erreur lors de la recupération des events en_cours', error)
     }

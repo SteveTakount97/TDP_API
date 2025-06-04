@@ -10,6 +10,7 @@ import { Switch } from '@/components/ui/switch'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import api from '@/lib/axios'
 import { useParams } from 'next/navigation'
+import { User } from 'lucide-react'
 
 type SolidarityEvent = {
   id: number
@@ -212,9 +213,11 @@ function EventList({ events }: { events: SolidarityEvent[] }) {
             </p>
             <p className="text-xs text-gray-400">
               📅 Lancé le {new Date(event.dateIssued).toLocaleDateString()}
-              
-              
             </p>
+            <p className="text-sm text-gray-400 flex">
+            <User className='text-green-500 h-5 w-4'/>
+              Membre ayant Cotiser
+              </p>
           </CardContent>
         </Card>
       ))}
